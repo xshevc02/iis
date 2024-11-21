@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('status', 50); // Loan status (e.g., "Loaned", "Returned")
             $table->timestamps(); // created_at and updated_at
             // Define foreign key constraints
-            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('device_id')->references('id')->on('Device')->onDelete('cascade');
         });
     }

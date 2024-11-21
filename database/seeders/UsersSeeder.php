@@ -17,11 +17,11 @@ class UsersSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         // Truncate the table
-        DB::table('user')->truncate();
+        DB::table('users')->truncate();
 
         // Enable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        DB::table('user')->insert([
+        DB::table('users')->insert([
             [
                 'username' => 'admin',
                 'name' => 'System Administrator',

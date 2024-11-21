@@ -25,7 +25,7 @@ return new class extends Migration
             // Define foreign keys
             $table->foreign('type_id')->references('id')->on('Device_Types')->onDelete('cascade');
             $table->foreign('studio_id')->references('id')->on('Studio')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('User')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('Users')->onDelete('set null');
         });
     }
 
