@@ -4,6 +4,7 @@ use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceTypeController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\StudioController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('devices', DeviceController::class);
     Route::resource('reservations', ReservationController::class);
     Route::resource('loans', LoanController::class);
-    Route::resource('studios', App\Http\Controllers\StudioController::class);
-
+    Route::resource('studios', StudioController::class);
 });

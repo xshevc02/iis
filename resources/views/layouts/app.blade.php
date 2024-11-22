@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Umělecká škola') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -19,59 +19,56 @@
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Umělecká škola') }}
+        <div class="container flex justify-center items-center">
+            <!-- Branding -->
+            <a class="navbar-brand absolute left-0" href="{{ url('/') }}">
+                {{ config('app.name', 'hahah') }}
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav me-auto">
-                    @auth
+            <!-- Menu Items -->
+            <ul class="navbar-nav space-x-4">
+                @auth
 
-                        <!-- Devices -->
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('devices.*') ? 'active' : '' }}" href="{{ route('devices.index') }}">
-                                {{ __('Devices') }}
-                            </a>
-                        </li>
+                    <!-- Devices -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('devices.*') ? 'active' : '' }}" href="{{ route('devices.index') }}">
+                            {{ __('Devices') }}
+                        </a>
+                    </li>
 
-                        <!-- Studios -->
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('studios.*') ? 'active' : '' }}" href="{{ route('studios.index') }}">
-                                {{ __('Studios') }}
-                            </a>
-                        </li>
+                    <!-- Studios -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('studios.*') ? 'active' : '' }}" href="{{ route('studios.index') }}">
+                            {{ __('Studios') }}
+                        </a>
+                    </li>
 
-                        <!-- Users -->
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                                {{ __('Users') }}
-                            </a>
-                        </li>
+                    <!-- Users -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
+                            {{ __('Users') }}
+                        </a>
+                    </li>
 
-                        <!-- Reservations -->
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('reservations.*') ? 'active' : '' }}" href="{{ route('reservations.index') }}">
-                                {{ __('Reservations') }}
-                            </a>
-                        </li>
+                    <!-- Reservations -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('reservations.*') ? 'active' : '' }}" href="{{ route('reservations.index') }}">
+                            {{ __('Reservations') }}
+                        </a>
+                    </li>
 
-                        <!-- Loans -->
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('loans.*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
-                                {{ __('Loans') }}
-                            </a>
-                        </li>
-                    @endauth
-                </ul>
+                    <!-- Loans -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('loans.*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
+                            {{ __('Loans') }}
+                        </a>
+                    </li>
+                @endauth
+            </ul>
 
-                <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ms-auto">
-                    <!-- Authentication Links -->
+            <!-- Right Side -->
+            <div class="absolute right-0">
+                <ul class="navbar-nav">
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
@@ -106,6 +103,7 @@
             </div>
         </div>
     </nav>
+
 
     <main class="py-4">
         <div class="container">
