@@ -51,6 +51,7 @@ class DeviceTypeController extends Controller
         $request->validate([
             'type_name' => 'required|string|max:255|unique:device_types,type_name,'.$deviceType->id,
         ]);
+      //  $deviceType->save();
 
         $deviceType->update($request->all());
 

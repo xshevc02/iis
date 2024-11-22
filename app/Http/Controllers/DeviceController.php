@@ -47,7 +47,8 @@ class DeviceController extends Controller
      */
     public function update(Request $request, Device $device)
     {
-        // Validate the incoming data
+        logger()->info('Update Device Request Data', $request->all());
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type_id' => 'required|exists:device_types,id',
@@ -59,8 +60,10 @@ class DeviceController extends Controller
             'available' => 'boolean',
         ]);
 
-        // Update the device with the validated data
+      //  $device->save();
+
         $device->update($validated);
+
 
         // Redirect back to the devices list or detail view
         return redirect()->route('devices.index')->with('success', 'Device updated successfully!');
