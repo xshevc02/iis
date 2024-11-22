@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Umělecká škola') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -21,7 +21,7 @@
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name', 'Umělecká škola') }}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
@@ -31,9 +31,39 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     @auth
+
+                        <!-- Devices -->
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                                {{ __('Dashboard') }}
+                            <a class="nav-link {{ request()->routeIs('devices.*') ? 'active' : '' }}" href="{{ route('devices.index') }}">
+                                {{ __('Devices') }}
+                            </a>
+                        </li>
+
+                        <!-- Studios -->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('studios.*') ? 'active' : '' }}" href="{{ route('studios.index') }}">
+                                {{ __('Studios') }}
+                            </a>
+                        </li>
+
+                        <!-- Users -->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
+                                {{ __('Users') }}
+                            </a>
+                        </li>
+
+                        <!-- Reservations -->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('reservations.*') ? 'active' : '' }}" href="{{ route('reservations.index') }}">
+                                {{ __('Reservations') }}
+                            </a>
+                        </li>
+
+                        <!-- Loans -->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('loans.*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
+                                {{ __('Loans') }}
                             </a>
                         </li>
                     @endauth

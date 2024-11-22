@@ -50,12 +50,12 @@ class DeviceTypeController extends Controller
     {
         logger()->info('Update Device Type Request Data:', $request->all());
 
-        // Validace příchozích dat
+        // Validate příchozích dat
         $validated = $request->validate([
             'type_name' => 'required|string|max:255',
         ]);
 
-        // Aktualizace typu zařízení
+        // Actualize type zařízení
         $deviceType->update($validated);
 
         // Přesměrování zpět s úspěšnou hláškou

@@ -30,6 +30,16 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
             </div>
+            <div class="form-group">
+                <label for="studio_id">Studio</label>
+                <select name="studio_id" id="studio_id" class="form-control">
+                    <option value="" disabled selected>Select a Studio</option>
+                    @foreach ($studios as $studio)
+                        <option value="{{ $studio->id }}">{{ $studio->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
 
             <!-- Password -->
             <div class="form-group">

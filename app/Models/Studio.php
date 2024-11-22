@@ -11,6 +11,7 @@ class Studio extends Model
 
     protected $fillable = ['name', 'location'];
 
+
     public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(User::class);

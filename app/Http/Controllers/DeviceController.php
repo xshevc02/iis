@@ -6,10 +6,7 @@ use App\Models\Device;
 use App\Models\DeviceType;
 use App\Models\Studio;
 use App\Models\User;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class DeviceController extends Controller
@@ -23,11 +20,6 @@ class DeviceController extends Controller
         return view('devices.index', compact('devices'));
     }
 
-    /**
-     * Show the form for editing the specified device.
-     *
-     * @return Factory|View|Application|\Illuminate\View\View
-     */
     public function edit(int $id)
     {
         // Najít zařízení podle ID
@@ -43,12 +35,6 @@ class DeviceController extends Controller
         return view('devices.edit', compact('device', 'device_types', 'studios'));
     }
 
-
-    /**
-     * Update the specified device in the database.
-     *
-     * @return RedirectResponse
-     */
     public function update(Request $request, Device $device)
     {
         // Logování pro ladění
