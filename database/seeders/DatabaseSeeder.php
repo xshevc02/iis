@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DeviceTypesSeeder::class, // Seeder for Device_Types table
             RoleSeeder::class,         //Seeder for Roles table (if exists)
-            UsersSeeder::class,
             AtelierSeeder::class,      // Seeder for Studios table (if exists)
+            UsersSeeder::class,
             DevicesSeeder::class,
             LoansSeeder::class,
             ReservationsSeeder::class]);
