@@ -14,13 +14,6 @@ class Loan extends Model
         'return_date', 'time_from', 'time_to', 'status',
     ];
 
-    public static function findOrFail($id)
-    {
-    }
-
-    public static function create(array $validated)
-    {
-    }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
