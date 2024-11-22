@@ -43,8 +43,6 @@ class DeviceController extends Controller
     /**
      * Update the specified device in the database.
      *
-     * @param Request $request
-     * @param Device $device
      * @return RedirectResponse
      */
     public function update(Request $request, Device $device)
@@ -67,8 +65,6 @@ class DeviceController extends Controller
         // Redirect back to the devices list or detail view
         return redirect()->route('devices.index')->with('success', 'Device updated successfully!');
     }
-
-
 
     public function create()
     {
@@ -107,5 +103,22 @@ class DeviceController extends Controller
 
         // Return a view to display the device details
         return view('devices.show', compact('device'));
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Find the device by ID
+            $device = Device::findOrFail($id);
+
+            // Delete the device
+            $device->delete();
+
+            // Redirect back with a success message
+            return redirect()->route('devices.index')->with('success', 'Device deleted successfully.');
+        } catch (\Exception) {
+            // Redirect back with an error message in case of failure
+            return redirect()->route('devices.index')->with('error', 'Failed to delete the device.');
+        }
     }
 }
