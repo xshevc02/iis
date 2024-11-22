@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Device', function (Blueprint $table) {
+        Schema::create('Devices', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->string('name', 100); // Device name
             $table->integer('year_of_manufacture'); // Year of manufacture
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps(); // created_at and updated_at
             // Define foreign keys
             $table->foreign('type_id')->references('id')->on('Device_Types')->onDelete('cascade');
-            $table->foreign('studio_id')->references('id')->on('Studio')->onDelete('cascade');
+            $table->foreign('studio_id')->references('id')->on('Studios')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('Users')->onDelete('set null');
         });
     }
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Device');
+        Schema::dropIfExists('Devices');
     }
 };

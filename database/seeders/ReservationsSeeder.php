@@ -16,7 +16,7 @@ class ReservationsSeeder extends Seeder
         DB::table('Reservations')->insert([
             [
                 'user_id' => 1,
-                'device_id' => 8,
+                'device_id' => 1,
                 'reservation_date' => '2024-11-15 12:00:00',
                 'duration' => 2,
                 'status' => 'Pending',
@@ -25,7 +25,7 @@ class ReservationsSeeder extends Seeder
             ],
             [
                 'user_id' => 3,
-                'device_id' => 11,
+                'device_id' => 2,
                 'reservation_date' => '2024-11-16 14:00:00',
                 'duration' => 3,
                 'status' => 'Approved',

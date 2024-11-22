@@ -24,8 +24,8 @@ return new class extends Migration
             $table->timestamps();
 
             // Define foreign keys
-            $table->foreign('role_id')->references('id')->on('role')->onDelete('cascade');
-            $table->foreign('studio_id')->references('id')->on('studio')->onDelete('set null');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('studio_id')->references('id')->on('studios')->onDelete('set null');
         });
 
     }

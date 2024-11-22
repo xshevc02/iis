@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamps(); // created_at and updated_at
             // Define foreign key constraints
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('device_id')->references('id')->on('Device')->onDelete('cascade');
+            $table->foreign('device_id')->references('id')->on('Devices')->onDelete('cascade');
         });
     }
 

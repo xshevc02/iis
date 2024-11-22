@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Reservation', function (Blueprint $table) {
+        Schema::create('Reservations', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->unsignedBigInteger('user_id'); // User ID
             $table->unsignedBigInteger('device_id'); // Device ID
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps(); // created_at and updated_at
             // Foreign key constraints
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('device_id')->references('id')->on('Device')->onDelete('cascade');
+            $table->foreign('device_id')->references('id')->on('Devices')->onDelete('cascade');
         });
     }
 
@@ -30,10 +30,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('Reservation', function (Blueprint $table) {
+        Schema::table('Reservations', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['device_id']);
         });
-        Schema::dropIfExists('Reservation');
+        Schema::dropIfExists('Reservations');
     }
 };
