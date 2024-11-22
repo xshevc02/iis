@@ -13,7 +13,7 @@ class ReservationsSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('Reservation')->insert([
+        DB::table('Reservations')->insert([
             [
                 'user_id' => 1,
                 'device_id' => 8,

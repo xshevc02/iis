@@ -13,7 +13,7 @@ class AtelierSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('Studio')->insert([
+        DB::table('Studios')->insert([
             ['name' => 'Photography Studio', 'location' => 'Building A'],
             ['name' => 'Sound Studio', 'location' => 'Building B'],
         ]);

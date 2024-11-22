@@ -13,7 +13,7 @@ class DevicesSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('Device')->insert([
+        DB::table('Devices')->insert([
             [
                 'name' => 'Canon EOS 5D',
                 'year_of_manufacture' => 2019,
