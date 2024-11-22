@@ -30,15 +30,19 @@ class DeviceController extends Controller
      */
     public function edit(int $id)
     {
-        // Fetch the device by its ID
+        // Najít zařízení podle ID
         $device = Device::findOrFail($id);
 
-        // Fetch all device types for the dropdown
+        // Načíst všechna studia
+        $studios = Studio::all();
+
+        // Načíst všechny typy zařízení
         $device_types = DeviceType::all();
 
-        // Return the edit view with the device data
-        return view('devices.edit', compact('device', 'device_types'));
+        // Vrátit šablonu s daty
+        return view('devices.edit', compact('device', 'device_types', 'studios'));
     }
+
 
     /**
      * Update the specified device in the database.
@@ -47,25 +51,24 @@ class DeviceController extends Controller
      */
     public function update(Request $request, Device $device)
     {
-        logger()->info('Update Device Request Data', $request->all());
+        // Logování pro ladění
+        logger()->info('Update Device Request Data:', $request->all());
 
+        // Validace
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type_id' => 'required|exists:device_types,id',
             'studio_id' => 'required|exists:studios,id',
-            'user_id' => 'nullable|exists:users,id',
-            'year_of_manufacture' => 'required|integer',
-            'purchase_date' => 'required|date',
-            'max_loan_duration' => 'required|integer',
-            'available' => 'boolean',
+            'available' => 'nullable|boolean',
         ]);
 
-      //  $device->save();
+        // Pokud checkbox "available" není zaškrtnutý, nastavíme hodnotu na false
+        $validated['available'] = $request->has('available');
 
+        // Aktualizace zařízení
         $device->update($validated);
 
-
-        // Redirect back to the devices list or detail view
+        // Přesměrování zpět s potvrzením
         return redirect()->route('devices.index')->with('success', 'Device updated successfully!');
     }
 

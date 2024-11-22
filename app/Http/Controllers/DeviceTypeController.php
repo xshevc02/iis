@@ -48,14 +48,18 @@ class DeviceTypeController extends Controller
     // Update the specified device type in the database
     public function update(Request $request, DeviceType $deviceType)
     {
-        $request->validate([
-            'type_name' => 'required|string|max:255|unique:device_types,type_name,'.$deviceType->id,
+        logger()->info('Update Device Type Request Data:', $request->all());
+
+        // Validace příchozích dat
+        $validated = $request->validate([
+            'type_name' => 'required|string|max:255',
         ]);
-      //  $deviceType->save();
 
-        $deviceType->update($request->all());
+        // Aktualizace typu zařízení
+        $deviceType->update($validated);
 
-        return redirect()->route('device-types.index')->with('success', 'Device Type updated successfully.');
+        // Přesměrování zpět s úspěšnou hláškou
+        return redirect()->route('device-types.index')->with('success', 'Device Type updated successfully!');
     }
 
     // Remove the specified device type from the database

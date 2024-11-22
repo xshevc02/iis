@@ -6,20 +6,20 @@
 
         <!-- Success Message -->
         @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+            <div class="alert alert-success">                <th>#</th>
+        {{ session('success') }}
+    </div>
+    @endif
 
-        <!-- Add New Device Button -->
-        <a href="{{ route('devices.create') }}" class="btn btn-primary mb-3">Add New Device</a>
+    <!-- Add New Device Button -->
+    <a href="{{ route('devices.create') }}" class="btn btn-primary mb-3">Add New Device</a>
 
-        <!-- Devices Table -->
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
+    <!-- Devices Table -->
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+
+        <th>Name</th>
                 <th>Type</th>
                 <th>Studio</th>
                 <th>Owner</th>
