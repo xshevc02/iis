@@ -11,6 +11,10 @@ class DeviceType extends Model
 
     protected $fillable = ['type_name'];
 
+    public static function paginate(int $int)
+    {
+    }
+
     public function devices(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Device::class);

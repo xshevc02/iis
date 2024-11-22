@@ -4,48 +4,75 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Device extends Model
 {
     use HasFactory;
-    protected $table = 'devices';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'name', 'type_id', 'studio_id', 'user_id',
-        'year_of_manufacture', 'purchase_date',
-        'max_loan_duration', 'available',
+        'name',
+        'type_id',
+        'studio_id',
+        'user_id',
+        'year_of_manufacture',
+        'purchase_date',
+        'max_loan_duration',
+        'available',
     ];
 
-    public static function where(string $string, true $true)
-    {
-    }
-
-    public static function findOrFail(mixed $device_id)
-    {
-    }
-
-
-    public function type(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    /**
+     * Define the relationship with the DeviceType model.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
     {
         return $this->belongsTo(DeviceType::class, 'type_id');
     }
 
-    public function studio(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    /**
+     * Define the relationship with the Studio model.
+     *
+     * @return BelongsTo
+     */
+    public function studio(): BelongsTo
     {
         return $this->belongsTo(Studio::class);
     }
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    /**
+     * Define the relationship with the User model.
+     *
+     * @return BelongsTo
+     */
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function loans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Define the relationship with the Loan model.
+     *
+     * @return HasMany
+     */
+    public function loans(): HasMany
     {
         return $this->hasMany(Loan::class);
     }
 
-    public function reservations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Define the relationship with the Reservation model.
+     *
+     * @return HasMany
+     */
+    public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
     }

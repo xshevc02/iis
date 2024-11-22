@@ -27,7 +27,7 @@
                 <label for="type_id">Device Type</label>
                 <select name="type_id" id="type_id" class="form-control" required>
                     <option value="" disabled selected>Select a type</option>
-                    @foreach ($deviceTypes as $type)
+                    @foreach ($device_types as $type)
                         <option value="{{ $type->id }}">{{ $type->type_name }}</option>
                     @endforeach
                 </select>
