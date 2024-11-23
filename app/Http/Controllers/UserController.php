@@ -39,21 +39,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required|exists:roles,id', // Validace role
-            'studio_id' => 'nullable|exists:studios,id', // Validace studia
         ]);
 
-        $user = User::create([
+        User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role_id' => $validated['role_id'],
-            'studio_id' => $validated['studio_id'] ?? null,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
-
 
     /**
      * Display the specified user.
@@ -80,21 +75,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role_id' => 'required|exists:roles,id',
-            'studio_id' => 'nullable|exists:studios,id',
         ]);
 
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
-            'role_id' => $validated['role_id'],
-            'studio_id' => $validated['studio_id'] ?? $user->studio_id,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
-
 
     /**
      * Remove the specified user from storage.
