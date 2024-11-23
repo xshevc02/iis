@@ -12,11 +12,10 @@ class RegisteredUser
         $user = Auth::user();
 
         // Registrovaný uživatel nebo vyšší role
-        if (!$user || !in_array($user->role->name, ['Registered User', 'Instructor', 'Studio Manager', 'Administrator'])) {
+        if (! $user || ! in_array($user->role->name, ['Registered User', 'Instructor', 'Studio Manager', 'Administrator'])) {
             return redirect()->route('dashboard')->withErrors(['error' => 'Nemáte oprávnění k přístupu na tuto stránku.']);
         }
 
         return $next($request);
     }
 }
-

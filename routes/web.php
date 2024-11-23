@@ -23,14 +23,14 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     // Resource Routes for CRUD Operations
-    Route::resource('users', UserController::class);
-    Route::resource('device-types', DeviceTypeController::class);
-    Route::resource('devices', DeviceController::class);
-    Route::resource('reservations', ReservationController::class);
-    Route::resource('loans', LoanController::class);
-    Route::resource('studios', StudioController::class);
+//    Route::resource('users', UserController::class);
+//    Route::resource('device-types', DeviceTypeController::class);
+//    Route::resource('devices', DeviceController::class);
+//    Route::resource('reservations', ReservationController::class);
+//    Route::resource('loans', LoanController::class);
+//    Route::resource('studios', StudioController::class);
 
-    Route::middleware(['auth', 'administrator'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
         Route::resource('users', UserController::class);
         Route::resource('studios', StudioController::class);
     });

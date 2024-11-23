@@ -12,7 +12,7 @@ class UnregisteredUser
         $user = Auth::user();
 
         // Neregistrovaný uživatel nemá žádná zvláštní omezení, protože není přihlášen
-        if (!$user) {
+        if (! $user) {
             return $next($request);
         }
 

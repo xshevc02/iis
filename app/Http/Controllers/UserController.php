@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with(['role', 'studio'])->get(); // Eager load role and studio
         $roles = Role::all(); // Fetch all roles
         $studios = Studio::all(); // Fetch all studios
 
@@ -63,28 +63,27 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $roles = Role::all(); // Fetch all roles
+        $studios = Studio::all(); // Fetch all studios
+
+        return view('users.edit', compact('user', 'roles', 'studios'));
     }
 
-    /**
-     * Update the specified user in storage.
-     */
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'password' => 'nullable|string|min:8|confirmed',
+            'role_id' => 'required|exists:roles,id',
+            'studio_id' => 'nullable|exists:studios,id',
         ]);
 
         $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
+            'role_id' => $validated['role_id'],
+            'studio_id' => $validated['studio_id'],
         ]);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
+
 
     /**
      * Remove the specified user from storage.

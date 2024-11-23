@@ -20,28 +20,42 @@
             @csrf
             @method('PUT')
 
-            <!-- Name -->
+            <!-- Name (Read-Only) -->
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $user->name) }}" required>
+                <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $user->name) }}" readonly>
             </div>
 
-            <!-- Email -->
+            <!-- Email (Read-Only) -->
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" readonly>
             </div>
 
-            <!-- Password -->
+            <!-- Role -->
             <div class="form-group">
-                <label for="password">New Password (Leave blank to keep current password)</label>
-                <input type="password" name="password" id="password" class="form-control">
+                <label for="role_id">Role</label>
+                <select name="role_id" id="role_id" class="form-control" required>
+                    <option value="" disabled>Select a Role</option>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                            {{ $role->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
-            <!-- Confirm Password -->
+            <!-- Studio -->
             <div class="form-group">
-                <label for="password_confirmation">Confirm New Password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                <label for="studio_id">Studio</label>
+                <select name="studio_id" id="studio_id" class="form-control">
+                    <option value="" disabled>Select a Studio</option>
+                    @foreach ($studios as $studio)
+                        <option value="{{ $studio->id }}" {{ $user->studio_id == $studio->id ? 'selected' : '' }}>
+                            {{ $studio->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Submit Button -->
