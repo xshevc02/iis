@@ -29,4 +29,25 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('reservations', ReservationController::class);
     Route::resource('loans', LoanController::class);
     Route::resource('studios', StudioController::class);
+
+    Route::middleware(['auth', 'administrator'])->group(function () {
+        Route::resource('users', UserController::class);
+        Route::resource('studios', StudioController::class);
+    });
+
+    Route::middleware(['auth', 'studio.manager'])->group(function () {
+        Route::resource('device-types', DeviceTypeController::class);
+        Route::get('studios/{studio}/manage', [StudioController::class, 'manage'])->name('studios.manage');
+    });
+
+    Route::middleware(['auth', 'instructor'])->group(function () {
+        Route::resource('devices', DeviceController::class);
+        Route::post('devices/{device}/toggle-availability', [DeviceController::class, 'toggleAvailability'])->name('devices.toggle-availability');
+    });
+
+    Route::middleware(['auth', 'registered.user'])->group(function () {
+        Route::resource('reservations', ReservationController::class);
+        Route::resource('loans', LoanController::class);
+    });
+
 });
