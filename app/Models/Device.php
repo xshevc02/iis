@@ -29,8 +29,6 @@ class Device extends Model
 
     /**
      * Define the relationship with the DeviceType model.
-     *
-     * @return BelongsTo
      */
     public function type(): BelongsTo
     {
@@ -39,8 +37,6 @@ class Device extends Model
 
     /**
      * Define the relationship with the Studio model.
-     *
-     * @return BelongsTo
      */
     public function studio(): BelongsTo
     {
@@ -59,8 +55,6 @@ class Device extends Model
 
     /**
      * Define the relationship with the Loan model.
-     *
-     * @return HasMany
      */
     public function loans(): HasMany
     {
@@ -69,11 +63,24 @@ class Device extends Model
 
     /**
      * Define the relationship with the Reservation model.
-     *
-     * @return HasMany
      */
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function isAvailable($reservationDate): bool
+    {
+        $availableStart = $this->available_from;
+        $availableEnd = $this->available_to;
+
+        if ($availableStart && $availableEnd) {
+            $startTime = strtotime("$reservationDate $availableStart");
+            $endTime = strtotime("$reservationDate $availableEnd");
+
+            return $startTime < $endTime;
+        }
+
+        return false;
     }
 }

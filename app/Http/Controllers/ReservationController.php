@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\Loan;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -44,8 +45,36 @@ class ReservationController extends Controller
         ]);
 
         Reservation::create($validated);
+        // Check device availability
+        $device = Device::find($validated['device_id']);
+        if ($device->available_from && $device->available_to) {
+            $reservationStartTime = $request->reservation_date.' '.$device->available_from;
+            $reservationEndTime = $request->reservation_date.' '.$device->available_to;
 
-        return redirect()->route('reservations.index')->with('success', 'Reservation created successfully.');
+            // Validate that the reservation fits within the available hours
+            if (strtotime($reservationStartTime) < strtotime($reservationEndTime)) {
+                // Create the reservation
+                $reservation = Reservation::create($validated);
+
+                // Automatically create a loan based on the reservation
+                Loan::create([
+                    'user_id' => $validated['user_id'],
+                    'device_id' => $validated['device_id'],
+                    'issue_date' => $reservation->reservation_date,
+                    'return_date' => date('Y-m-d', strtotime('+'.$validated['duration'].' days', strtotime($reservation->reservation_date))),
+                    'status' => 'Loaned', // You can define a default status
+                    'time_from' => $device->available_from,
+                    'time_to' => $device->available_to,
+                    'room' => $device->room, // Assuming the `room` column exists in the `devices` table
+                ]);
+
+                return redirect()->route('reservations.index')->with('success', 'Reservation and Loan created successfully.');
+            } else {
+                return redirect()->back()->withErrors(['The reservation does not fit within the available hours.']);
+            }
+        }
+
+        return redirect()->back()->withErrors(['The device is not available for the selected date and time.']);
     }
 
     /**
