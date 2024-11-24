@@ -7,7 +7,6 @@
         <!-- Reservation Information Card -->
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Reservation #{{ $reservation->id }}</h5>
 
                 <p><strong>User:</strong> {{ $reservation->user->name }}</p>
                 <p><strong>Device:</strong> {{ $reservation->device->name }}</p>

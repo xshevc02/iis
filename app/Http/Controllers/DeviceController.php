@@ -8,6 +8,7 @@ use App\Models\Studio;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DeviceController extends Controller
 {
@@ -22,9 +23,12 @@ class DeviceController extends Controller
 
     public function edit(int $id)
     {
-        // Najít zařízení podle ID
-        $device = Device::findOrFail($id);
+        // Check if the user is allowed to edit devices
+        if (Auth::user()->role->name !== 'Administrator' && Auth::user()->role->name !== 'Studio Manager' && Auth::user()->role->name !== 'Instructor') {
+            return redirect()->route('no-access');
+        }
 
+        $device = Device::findOrFail($id);
         // Načíst všechna studia
         $studios = Studio::all();
 
@@ -99,6 +103,10 @@ class DeviceController extends Controller
 
     public function destroy($id)
     {
+        // Check if the user is allowed to delete devices
+        if (Auth::user()->role->name !== 'Administrator' && Auth::user()->role->name !== 'Studio Manager' && Auth::user()->role->name !== 'Instructor') {
+            return redirect()->route('no-access');
+        }
         try {
             // Find the device by ID
             $device = Device::findOrFail($id);

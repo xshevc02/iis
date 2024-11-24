@@ -6,6 +6,7 @@ use App\Models\Device;
 use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoanController extends Controller
 {
@@ -14,7 +15,9 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $loans = Loan::with('device', 'user')->get(); // Eager load related data
+        // Get the authenticated user
+        $user = auth()->user();
+        $loans = Loan::where('user_id', $user->id)->get();
 
         return view('loans.index', compact('loans'));
     }
@@ -70,6 +73,10 @@ class LoanController extends Controller
      */
     public function edit($id)
     {
+        // Check if the user is allowed to delete devices
+        if (Auth::user()->role->name !== 'Administrator') {
+            return redirect()->route('no-access');
+        }
         $loan = Loan::findOrFail($id);
         $devices = Device::all();
         $users = User::all();
@@ -109,6 +116,10 @@ class LoanController extends Controller
      */
     public function destroy($id)
     {
+        // Check if the user is allowed to delete devices
+        if (Auth::user()->role->name !== 'Administrator') {
+            return redirect()->route('no-access');
+        }
         $loan = Loan::findOrFail($id);
 
         // Set device availability back to true if loan is deleted

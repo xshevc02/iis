@@ -15,8 +15,12 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservations = Reservation::with(['user', 'device'])->get(); // Eager load related models
+        $user = auth()->user(); // Get the authenticated user
 
+        // Fetch only the reservations of the authenticated user
+        $reservations = Reservation::where('user_id', $user->id)->get();
+
+        // Pass the reservations to the view
         return view('reservations.index', compact('reservations'));
     }
 

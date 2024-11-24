@@ -43,8 +43,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/Reservations', function () {
         if (session('role_id') == '1' || session('role_id') == '2' || session('role_id') == '3' || session('role_id') == '4') {
-            $reservations = Reservation::with(['user', 'device'])->get(); // Ensure the Reservation model is imported
+            $user = auth()->user(); // Get the authenticated user
 
+            // Fetch only the reservations of the authenticated user
+            $reservations = Reservation::where('user_id', $user->id)->get();
+
+            // Pass the reservations to the view
             return view('reservations.index', compact('reservations'));
         } else {
             return redirect()->route('no-access');
@@ -75,7 +79,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/Loans', function () {
         if (session('role_id') == '1' || session('role_id') == '2' || session('role_id') == '3' || session('role_id') == '4') {
-            $loans = Loan::with('device', 'user')->get(); // Eager load related data
+            // Get the authenticated user
+            $user = auth()->user();
+            $loans = Loan::where('user_id', $user->id)->get();
 
             return view('loans.index', compact('loans'));
         } else {
