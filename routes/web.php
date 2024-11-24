@@ -3,6 +3,7 @@
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceTypeController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StudioController;
 use App\Http\Controllers\UserController;
@@ -91,4 +92,11 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('no-access');
         }
     })->name('studios.index');
+
+
+
+});
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
