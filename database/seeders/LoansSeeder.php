@@ -16,7 +16,7 @@ class LoansSeeder extends Seeder
         DB::table('Loans')->insert([
             [
                 'user_id' => 1,
-                'device_id' => 1,
+                'device_id' => 3,
                 'issue_date' => '2024-11-20 09:00:00',
                 'return_date' => '2024-11-21 16:00:00',
                 'time_from' => '09:00:00',

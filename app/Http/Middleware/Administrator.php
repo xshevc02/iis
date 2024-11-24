@@ -14,7 +14,7 @@ class Administrator
         $user = Auth::user();
 
         // Administrátor musí mít roli "Administrator"
-        if (! auth()->check() || auth()->user()->role->name !== 'Administrator') {
+        if (! auth()->check() || auth()->user()->role->id !== 1) {
             return redirect()->route('dashboard')->withErrors(['error' => 'Nemáte oprávnění k přístupu na tuto stránku.']);
         }
 

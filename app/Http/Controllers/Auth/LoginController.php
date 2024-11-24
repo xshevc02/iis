@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Composer\DependencyResolver\Request;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
@@ -22,11 +23,19 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Handle actions after user is authenticated.
      *
-     * @var string
+     * @param  User  $user
+     * @return RedirectResponse
      */
-    protected $redirectTo = '/dashboard';
+    protected function authenticated(\Illuminate\Http\Request $request, $user)
+    {
+        // Генерируем событие
+        $request->session()->put('role_id', $user->role_id);
+
+        // Перенаправляем пользователя
+        return redirect()->intended('/dashboard');
+    }
 
     /**
      * Create a new controller instance.
@@ -38,6 +47,4 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
-
-
 }

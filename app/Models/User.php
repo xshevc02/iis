@@ -12,9 +12,8 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
-    use Notifiable;
 
-    public mixed $role;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -53,8 +52,21 @@ class User extends Authenticatable
 
     public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::retrieved(function ($user) {
+            if ($user->relationLoaded('role') || $user->role) {
+                session(['role_id' => $user->role_id]);
+            }
+        });
+    }
+
+   // public mixed $role_id;
 
     public function studio(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
