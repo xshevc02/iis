@@ -48,11 +48,6 @@
                                 @endforeach
                                 </tbody>
                             </table>
-
-                            <!-- Pagination -->
-                            <div class="d-flex justify-content-center">
-                                {{ $studios->links() }}
-                            </div>
                         @endif
                     </div>
                 </div>

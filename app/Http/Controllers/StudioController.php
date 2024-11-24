@@ -12,7 +12,7 @@ class StudioController extends Controller
      */
     public function index()
     {
-        $studios = Studio::paginate(10); // Paginate with 10 studios per page
+        $studios = Studio::all();
         return view('studios.index', compact('studios'));
     }
 
