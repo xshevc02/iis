@@ -44,37 +44,46 @@ class ReservationController extends Controller
             'status' => 'required|string|max:50',
         ]);
 
-        Reservation::create($validated);
-        // Check device availability
-        $device = Device::find($validated['device_id']);
-        if ($device->available_from && $device->available_to) {
-            $reservationStartTime = $request->reservation_date.' '.$device->available_from;
-            $reservationEndTime = $request->reservation_date.' '.$device->available_to;
+        // Get the device to check its max_loan_duration
+        $device = Device::findOrFail($validated['device_id']);
 
-            // Validate that the reservation fits within the available hours
-            if (strtotime($reservationStartTime) < strtotime($reservationEndTime)) {
-                // Create the reservation
-                $reservation = Reservation::create($validated);
+        // Check if the requested duration exceeds the max_loan_duration
+        if ($validated['duration'] > $device->max_loan_duration) {
+            return back()->withErrors([
+                'duration' => "The duration cannot exceed the maximum loan duration of {$device->max_loan_duration} days for this device.",
+            ])->withInput();
+        }
+        // Calculate the end date of the reservation
+        $endDate = date('Y-m-d', strtotime('+'.$validated['duration'].' days', strtotime($validated['reservation_date'])));
 
-                // Automatically create a loan based on the reservation
-                Loan::create([
-                    'user_id' => $validated['user_id'],
-                    'device_id' => $validated['device_id'],
-                    'issue_date' => $reservation->reservation_date,
-                    'return_date' => date('Y-m-d', strtotime('+'.$validated['duration'].' days', strtotime($reservation->reservation_date))),
-                    'status' => 'Loaned', // You can define a default status
-                    'time_from' => $device->available_from,
-                    'time_to' => $device->available_to,
-                    'room' => $device->room, // Assuming the `room` column exists in the `devices` table
-                ]);
+        // Check for overlapping reservations
+        $overlappingReservation = Reservation::where('device_id', $validated['device_id'])
+            ->where(function ($query) use ($validated, $endDate) {
+                $query->whereBetween('reservation_date', [$validated['reservation_date'], $endDate])
+                    ->orWhereRaw('? BETWEEN reservation_date AND DATE_ADD(reservation_date, INTERVAL duration DAY)', [$validated['reservation_date']])
+                    ->orWhereRaw('? BETWEEN reservation_date AND DATE_ADD(reservation_date, INTERVAL duration DAY)', [$endDate]);
+            })
+            ->exists();
 
-                return redirect()->route('reservations.index')->with('success', 'Reservation and Loan created successfully.');
-            } else {
-                return redirect()->back()->withErrors(['The reservation does not fit within the available hours.']);
-            }
+        if ($overlappingReservation) {
+            return redirect()->back()->withErrors(['The device is already reserved during the requested period.']);
         }
 
-        return redirect()->back()->withErrors(['The device is not available for the selected date and time.']);
+        // Create the reservation
+        $reservation = Reservation::create($validated);
+
+        // Automatically create a loan for the reservation
+        Loan::create([
+            'user_id' => $validated['user_id'],
+            'device_id' => $validated['device_id'],
+            'issue_date' => $validated['reservation_date'],
+            'return_date' => $endDate,
+            'time_from' => '',
+            'time_to' => '',
+            'status' => 'Pending',
+        ]);
+
+        return redirect()->route('reservations.index')->with('success', 'Reservation and Loan created successfully.');
     }
 
     /**

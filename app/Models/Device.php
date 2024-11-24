@@ -69,18 +69,5 @@ class Device extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function isAvailable($reservationDate): bool
-    {
-        $availableStart = $this->available_from;
-        $availableEnd = $this->available_to;
 
-        if ($availableStart && $availableEnd) {
-            $startTime = strtotime("$reservationDate $availableStart");
-            $endTime = strtotime("$reservationDate $availableEnd");
-
-            return $startTime < $endTime;
-        }
-
-        return false;
-    }
 }
