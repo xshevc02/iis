@@ -4,7 +4,6 @@
     <div class="container">
         <h1>Create a New Reservation</h1>
 
-        <!-- Display Validation Errors -->
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -15,7 +14,6 @@
             </div>
         @endif
 
-        <!-- Reservation Form -->
         <form action="{{ route('reservations.store') }}" method="POST">
             @csrf
 
@@ -25,7 +23,9 @@
                 <select name="user_id" id="user_id" class="form-control" required>
                     <option value="" disabled selected>Select a User</option>
                     @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        <option value="{{ $user->id }}" {{ Auth::id() == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -34,9 +34,11 @@
             <div class="form-group">
                 <label for="device_id">Device</label>
                 <select name="device_id" id="device_id" class="form-control" required>
-                    <option value="" disabled selected>Select a Device</option>
+                    <option value="" disabled {{ $selectedDevice ? '' : 'selected' }}>Select a Device</option>
                     @foreach ($devices as $device)
-                        <option value="{{ $device->id }}">{{ $device->name }}</option>
+                        <option value="{{ $device->id }}" {{ $selectedDevice && $selectedDevice->id == $device->id ? 'selected' : '' }}>
+                            {{ $device->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -46,13 +48,6 @@
                 <label for="reservation_date">Reservation Date</label>
                 <input type="date" name="reservation_date" id="reservation_date" class="form-control" required>
             </div>
-
-            <!-- Duration -->
-            <div class="form-group">
-                <label for="duration">Duration (in days)</label>
-                <input type="number" name="duration" id="duration" class="form-control" required min="1">
-            </div>
-
             <!-- Status -->
             <div class="form-group">
                 <label for="status">Status</label>
@@ -62,8 +57,12 @@
                     <option value="Rejected">Rejected</option>
                 </select>
             </div>
+            <!-- Duration -->
+            <div class="form-group">
+                <label for="duration">Duration (in days)</label>
+                <input type="number" name="duration" id="duration" class="form-control" required min="1">
+            </div>
 
-            <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Create Reservation</button>
             <a href="{{ route('reservations.index') }}" class="btn btn-secondary">Cancel</a>
         </form>

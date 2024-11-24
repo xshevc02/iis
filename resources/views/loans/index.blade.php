@@ -11,8 +11,7 @@
             </div>
         @endif
 
-        <!-- Add New Loan Button -->
-        <a href="{{ route('loans.create') }}" class="btn btn-primary mb-3">Add New Loan</a>
+
 
         <!-- Loans Table -->
         <table class="table table-bordered">

@@ -23,12 +23,17 @@ class ReservationController extends Controller
     /**
      * Show the form for creating a new reservation.
      */
-    public function create()
+    public function create(Request $request)
     {
         $users = User::all();
         $devices = Device::where('available', true)->get(); // Only available devices
 
-        return view('reservations.create', compact('users', 'devices'));
+        $selectedDevice = null;
+        if ($request->has('device_id')) {
+            $selectedDevice = Device::find($request->device_id); // Fetch selected device if provided
+        }
+
+        return view('reservations.create', compact('users', 'devices', 'selectedDevice'));
     }
 
     /**
@@ -128,6 +133,9 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
+        // Update the device availability before deleting the reservation
+        $reservation->device->update(['available' => true]);
+
         $reservation->delete();
 
         return redirect()->route('reservations.index')->with('success', 'Reservation deleted successfully.');

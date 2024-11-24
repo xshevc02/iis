@@ -11,8 +11,6 @@
             </div>
         @endif
 
-        <!-- Add New Reservation Button -->
-        <a href="{{ route('reservations.create') }}" class="btn btn-primary mb-3">Add New Reservation</a>
 
         <!-- Reservations Table -->
         <table class="table table-bordered">
