@@ -14,7 +14,11 @@
         <!-- Buttons Section -->
         <div class="d-flex mb-3">
             <a href="{{ route('devices.create') }}" class="btn btn-primary me-2">Add New Device</a>
-            <a href="{{ route('reservations.create') }}" class="btn btn-success">Reservate Device</a>
+            @if(auth()->user()->can_make_reservations)
+                <a href="{{ route('reservations.create') }}" class="btn btn-primary">Make a Reservation</a>
+            @else
+                <p class="text-danger">Ooops( You are not allowed to make reservations!</p>
+            @endif
         </div>
 
         <!-- Devices Table -->

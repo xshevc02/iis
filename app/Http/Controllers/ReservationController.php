@@ -45,6 +45,12 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user(); // Get the logged-in user
+
+        // Check if the user can make reservations
+        if (! $user->can_make_reservations) {
+            return redirect()->route('no-access');
+        }
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'device_id' => 'required|exists:devices,id',

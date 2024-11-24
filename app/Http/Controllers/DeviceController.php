@@ -100,6 +100,17 @@ class DeviceController extends Controller
         // Return a view to display the device details
         return view('devices.show', compact('device'));
     }
+    public function assignToUser(Request $request, $id)
+    {
+        $device = Device::findOrFail($id);
+        $user = auth()->user(); // Or fetch another user as needed
+
+        // Assign the device to the user
+        $user->device_id = $device->id;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Device successfully assigned to the user.');
+    }
 
     public function destroy($id)
     {

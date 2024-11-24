@@ -58,6 +58,13 @@
                 </select>
             </div>
 
+            <!-- Can Make Reservations -->
+            <div class="form-group form-check">
+                <input type="checkbox" name="can_make_reservations" id="can_make_reservations" class="form-check-input"
+                    {{ $user->can_make_reservations ? 'checked' : '' }}>
+                <label for="can_make_reservations" class="form-check-label">Allow this user to make reservations</label>
+            </div>
+
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Save Changes</button>
             <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>

@@ -25,6 +25,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id', 'studio_id',
+        'can_make_reservations',
+        'device_id',
     ];
 
     /**
