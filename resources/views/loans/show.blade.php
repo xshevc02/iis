@@ -15,6 +15,9 @@
                 <p><strong>Time From:</strong> {{ $loan->time_from }}</p>
                 <p><strong>Time To:</strong> {{ $loan->time_to }}</p>
                 <p><strong>Status:</strong> {{ $loan->status }}</p>
+                <p><strong>Room:</strong> {{ $loan->room }}</p>
+                <p><strong>Available from</strong> {{ $loan->available_from }}</p>
+                <p><strong>Available to</strong> {{ $loan->available_to }}</p>
 
                 <a href="{{ route('loans.edit', $loan->id) }}" class="btn btn-primary">Edit Loan</a>
                 <form action="{{ route('loans.destroy', $loan->id) }}" method="POST" style="display:inline-block;">

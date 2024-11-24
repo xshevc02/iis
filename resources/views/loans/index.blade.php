@@ -18,24 +18,29 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>#</th>
                 <th>User</th>
                 <th>Device</th>
                 <th>Issue Date</th>
                 <th>Return Date</th>
                 <th>Status</th>
+                <th>Room</th>
+                <th>Available from</th>
+                <th>Available to</th>
                 <th>Actions</th>
+
             </tr>
             </thead>
             <tbody>
             @forelse($loans as $loan)
                 <tr>
-                    <td>{{ $loan->id }}</td>
                     <td>{{ $loan->user->name }}</td>
                     <td>{{ $loan->device->name }}</td>
                     <td>{{ $loan->issue_date }}</td>
                     <td>{{ $loan->return_date ?? 'Not Returned Yet' }}</td>
                     <td>{{ $loan->status }}</td>
+                    <td>{{ $loan->room }}</td>
+                    <td>{{ $loan->available_from }}</td>
+                    <td>{{ $loan->available_to }}</td>
                     <td>
                         <a href="{{ route('loans.show', $loan->id) }}" class="btn btn-info btn-sm">View</a>
                         <a href="{{ route('loans.edit', $loan->id) }}" class="btn btn-warning btn-sm">Edit</a>

@@ -18,7 +18,6 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>#</th>
                 <th>User</th>
                 <th>Device</th>
                 <th>Reservation Date</th>
@@ -30,7 +29,6 @@
             <tbody>
             @forelse($reservations as $reservation)
                 <tr>
-                    <td>{{ $reservation->id }}</td>
                     <td>{{ $reservation->user->name }}</td>
                     <td>{{ $reservation->device->name }}</td>
                     <td>{{ $reservation->reservation_date }}</td>

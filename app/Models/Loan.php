@@ -11,7 +11,8 @@ class Loan extends Model
 
     protected $fillable = [
         'user_id', 'device_id', 'issue_date',
-        'return_date', 'time_from', 'time_to', 'status',
+        'return_date', 'time_from', 'time_to', 'status', 'room', 'available_from',
+        'available_to',
     ];
 
 

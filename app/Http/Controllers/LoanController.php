@@ -43,6 +43,7 @@ class LoanController extends Controller
             'time_from' => 'required',
             'time_to' => 'required|after:time_from',
             'status' => 'required|string|max:50',
+            'room' => 'required|string|max:50',
         ]);
 
         Loan::create($validated);

@@ -31,7 +31,6 @@
             <tbody>
             @forelse($devices as $device)
                 <tr>
-                    <td>{{ $device->id }}</td>
                     <td>{{ $device->name }}</td>
                     <td>{{ $device->type->type_name }}</td>
                     <td>{{ $device->studio->name }}</td>

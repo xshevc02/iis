@@ -24,6 +24,9 @@ class LoansSeeder extends Seeder
                 'status' => 'Loaned',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'room' => 'D105',
+                'available_from' => '09:00:00',
+                'available_to' => '16:00:00',
             ],
             [
                 'user_id' => 2,
@@ -35,6 +38,9 @@ class LoansSeeder extends Seeder
                 'status' => 'Returned',
                 'created_at' => now(),
                 'updated_at' => now(),
+                'room' => 'A112',
+                'available_from' => '09:00:00',
+                'available_to' => '16:00:00',
             ],
         ]);
     }

@@ -23,7 +23,6 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
                                     <th>Name</th>
                                     <th>Location</th>
                                     <th>Actions</th>
@@ -32,7 +31,6 @@
                                 <tbody>
                                 @foreach ($studios as $studio)
                                     <tr>
-                                        <td>{{ $studio->id }}</td>
                                         <td>{{ $studio->name }}</td>
                                         <td>{{ $studio->location }}</td>
                                         <td>
