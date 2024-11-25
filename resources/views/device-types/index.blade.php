@@ -1,33 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Device Types</h1>
-        <a href="{{ route('device-types.create') }}" class="btn btn-primary">Add Device Type</a>
-        <table class="table mt-3">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Type Name</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($deviceTypes as $type)
-                <tr>
-                    <td>{{ $type->id }}</td>
-                    <td>{{ $type->type_name }}</td>
-                    <td>
-                        <a href="{{ route('device-types.edit', $type) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('device-types.destroy', $type) }}" method="POST" style="display: inline;">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Device Types</h1>
+
+        <!-- Success Message -->
+        @if (session('success'))
+            <div class="alert alert-success text-center">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Add Device Type Button -->
+        <div class="text-center mb-4">
+            <a href="{{ route('device-types.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Device Type
+            </a>
+        </div>
+
+        <!-- Device Types Cards -->
+        <div class="d-flex flex-wrap justify-content-center">
+            @forelse ($deviceTypes as $deviceType)
+                <div class="card m-3 shadow-sm" style="width: 13rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ $deviceType->type_name }}</h5>
+                    </div>
+                    <div class="card-footer d-flex justify-content-around">
+                        <a href="{{ route('device-types.edit', $deviceType->id) }}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form action="{{ route('device-types.destroy', $deviceType->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this device type?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
                         </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            @empty
+                <div class="col-12">
+                    <p class="text-center text-muted">No device types available. Please add one.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 @endsection

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Studio;
 use Illuminate\Http\Request;
 
-class StudioController extends Controller
+class StudiosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -50,22 +50,28 @@ class StudioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Studio $studio)
+    public function edit($id)
     {
+        $studio = Studio::findOrFail($id);
+
         return view('studios.edit', compact('studio'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Studio $studio)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $studio = Studio::findOrFail($id);
+
+        // Validate the request
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
+            'location' => 'required|string|max:255',
         ]);
 
-        $studio->update($request->all());
+        // Update the studio with the validated data
+        $studio->update($validated);
 
         return redirect()->route('studios.index')->with('success', 'Studio updated successfully.');
     }

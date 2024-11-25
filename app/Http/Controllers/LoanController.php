@@ -73,10 +73,7 @@ class LoanController extends Controller
      */
     public function edit($id)
     {
-        // Check if the user is allowed to delete devices
-        if (Auth::user()->role->name !== 'Administrator') {
-            return redirect()->route('no-access');
-        }
+
         $loan = Loan::findOrFail($id);
         $devices = Device::all();
         $users = User::all();
@@ -116,10 +113,7 @@ class LoanController extends Controller
      */
     public function destroy($id)
     {
-        // Check if the user is allowed to delete devices
-        if (Auth::user()->role->name !== 'Administrator') {
-            return redirect()->route('no-access');
-        }
+
         $loan = Loan::findOrFail($id);
 
         // Set device availability back to true if loan is deleted

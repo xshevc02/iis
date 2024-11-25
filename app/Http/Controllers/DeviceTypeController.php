@@ -10,7 +10,7 @@ class DeviceTypeController extends Controller
     // Display a listing of device types
     public function index()
     {
-        $deviceTypes = DeviceType::paginate(10); // 10 items per page
+        $deviceTypes = DeviceType::all(); // 10 items per page
 
         return view('device-types.index', compact('deviceTypes'));
     }
@@ -24,13 +24,13 @@ class DeviceTypeController extends Controller
     // Store a newly created device type in the database
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'type_name' => 'required|string|max:255',
         ]);
 
-        DeviceType::create($request->all());
+        DeviceType::create($validatedData);
 
-        return redirect()->route('device-types.index')->with('success', 'Device Type created successfully.');
+        return redirect()->route('device-types.index')->with('success', 'Device type added successfully!');
     }
 
     // Display the specified device type
@@ -40,26 +40,24 @@ class DeviceTypeController extends Controller
     }
 
     // Show the form for editing the specified device type
-    public function edit(DeviceType $deviceType)
+    public function edit($id)
     {
+        $deviceType = DeviceType::findOrFail($id);
         return view('device-types.edit', compact('deviceType'));
     }
 
     // Update the specified device type in the database
-    public function update(Request $request, DeviceType $deviceType)
+    public function update(Request $request, $id)
     {
-        logger()->info('Update Device Type Request Data:', $request->all());
 
-        // Validate příchozích dat
-        $validated = $request->validate([
+        $request->validate([
             'type_name' => 'required|string|max:255',
         ]);
 
-        // Actualize type zařízení
-        $deviceType->update($validated);
+        $deviceType = DeviceType::findOrFail($id);
+        $deviceType->update($request->all());
 
-        // Přesměrování zpět s úspěšnou hláškou
-        return redirect()->route('device-types.index')->with('success', 'Device Type updated successfully!');
+        return redirect()->route('device-types.index')->with('success', 'Device Type updated successfully.');
     }
 
     // Remove the specified device type from the database

@@ -5,7 +5,7 @@ use App\Http\Controllers\DeviceTypeController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\StudioController;
+use App\Http\Controllers\StudiosController;
 use App\Http\Controllers\UserController;
 use App\Models\Device;
 use App\Models\Loan;
@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::post('/users/{user}/assign-to-studio', [UserController::class, 'assignToStudio'])->name('users.assignToStudio');
 
     //   Resource Routes for CRUD Operations
     Route::resource('users', UserController::class);
@@ -35,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('devices', DeviceController::class);
     Route::resource('reservations', ReservationController::class);
     Route::resource('loans', LoanController::class);
-    Route::resource('studios', StudioController::class);
+    Route::resource('studios', StudiosController::class);
 
     Route::get('/no-access', function () {
         return view('no-access');
@@ -66,15 +67,22 @@ Route::middleware(['auth'])->group(function () {
     })->name('devices.index');
 
     Route::get('/Users', function () {
-        if (session('role_id') == '1' || session('role_id') == '2' || session('role_id') == '3') {
-            $users = User::with(['role', 'studio'])->get(); // Eager load role and studio
-            $roles = Role::all(); // Fetch all roles
-            $studios = Studio::all(); // Fetch all studios
+        $authUser = auth()->user(); // Get the authenticated user
 
-            return view('users.index', compact('users', 'roles', 'studios'));
+        if (session('role_id') == '1') { // Admin role
+            $users = User::with(['role', 'studio'])->get();
+        } elseif (session('role_id') == '2' || session('role_id') == '3') { // Manager or teacher roles
+            $users = User::with(['role', 'studio'])
+                ->where('studio_id', $authUser->studio_id)
+                ->get();
         } else {
-            return redirect()->route('no-access');
+            return redirect()->route('no-access'); // Redirect for unauthorized roles
         }
+
+        $roles = Role::all(); // Fetch all roles
+        $studios = Studio::all(); // Fetch all studios
+
+        return view('users.index', compact('users', 'roles', 'studios'));
     })->name('users.index');
 
     Route::get('/Loans', function () {

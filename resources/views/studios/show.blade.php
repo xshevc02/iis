@@ -23,12 +23,13 @@
                             </tr>
                             <tr>
                                 <th>Created At</th>
-                                <td>{{ $studio->created_at->format('d M Y, H:i') }}</td>
+                                <td>{{ $studio->created_at ? $studio->created_at->format('d M Y, H:i') : 'N/A' }}</td>
                             </tr>
                             <tr>
                                 <th>Updated At</th>
-                                <td>{{ $studio->updated_at->format('d M Y, H:i') }}</td>
+                                <td>{{ $studio->updated_at ? $studio->updated_at->format('d M Y, H:i') : 'N/A' }}</td>
                             </tr>
+
                         </table>
 
                         <div class="mt-4">

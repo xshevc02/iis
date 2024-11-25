@@ -14,6 +14,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
+
         return view('profile.edit', compact('user'));
     }
 
@@ -25,7 +26,7 @@ class ProfileController extends Controller
         // Validate the input fields
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'email' => 'required|string|email|max:255|unique:users,email,'.Auth::id(),
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 

@@ -42,12 +42,15 @@
                     <td>{{ $loan->available_to }}</td>
                     <td>
                         <a href="{{ route('loans.show', $loan->id) }}" class="btn btn-info btn-sm">View</a>
-                        <a href="{{ route('loans.edit', $loan->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('loans.destroy', $loan->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this loan?')">Delete</button>
-                        </form>
+                        @if (auth()->user()->role->name === 'administrator')
+                            <a href="{{ route('loans.edit', $loan->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('loans.destroy', $loan->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this loan?')">Delete</button>
+                            </form>
+                        @endif
+
                     </td>
                 </tr>
             @empty

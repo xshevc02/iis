@@ -1,85 +1,47 @@
-<?php
+@extends('layouts.app')
 
-namespace App\Http\Controllers;
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Edit Studio</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Display Validation Errors -->
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
-use App\Models\Studio;
-use Illuminate\Http\Request;
+                        <!-- Edit Studio Form -->
+                        <form action="{{ route('studios.update', $studio->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
 
-class StudioController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $studios = Studio::paginate(10); // Paginate with 10 studios per page
-        return view('studios.index', compact('studios'));
-    }
+                            <div class="form-group mb-3">
+                                <label for="name">Studio Name</label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') ?? $studio->name }}" required>
+                            </div>
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('studios.create');
-    }
+                            <div class="form-group mb-3">
+                                <label for="location">Building</label>
+                                <input type="text" name="location" id="location" class="form-control" value="{{ old('location') ?? $studio->location }}" required>
+                            </div>
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-        ]);
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="{{ route('studios.index') }}" class="btn btn-secondary">Cancel</a>
+                        </form>
 
-        Studio::create($request->all());
-
-        return redirect()->route('studios.index')->with('success', 'Studio created successfully.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Studio $studio): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
-    {
-        return view('studios.show', compact('studio'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Studio $studio): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
-    {
-        return view('studios.edit', compact('studio'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Studio $studio): \Illuminate\Http\RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-        ]);
-
-        $studio->update($request->all());
-
-        return redirect()->route('studios.index')->with('success', 'Studio updated successfully.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Studio $studio): \Illuminate\Http\RedirectResponse
-    {
-        try {
-            $studio->delete();
-            return redirect()->route('studios.index')->with('success', 'Studio deleted successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('studios.index')->with('error', 'Unable to delete studio. It may be linked to other records.');
-        }
-    }
-}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

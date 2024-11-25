@@ -1,29 +1,41 @@
 @extends('layouts.app')
-
 @section('content')
-    <div class="container">
-        <h1>User Details</h1>
 
-        <!-- User Information Card -->
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ $user->name }}</h5>
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Users Without Studio</h1>
 
-                <p><strong>Email:</strong> {{ $user->email }}</p>
-                <p><strong>Role:</strong> {{ $user->role->name ?? 'N/A' }}</p>
-                <p><strong>Studio:</strong> {{ $user->studio->name ?? 'N/A' }}</p>
-                <p><strong>Created At:</strong> {{ $user->created_at->format('d M Y') }}</p>
-                <p><strong>Updated At:</strong> {{ $user->updated_at->format('d M Y') }}</p>
-
-                <!-- Actions -->
-                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">Edit</a>
-                <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                </form>
-                <a href="{{ route('users.index') }}" class="btn btn-secondary">Back to Users</a>
-            </div>
+    @if ($usersWithoutStudio->count() > 0)
+        <table class="table table-striped table-bordered">
+            <thead class="table-light">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach ($usersWithoutStudio as $user)
+                <tr>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>{{ $user->role->name ?? 'N/A' }}</td>
+                    <td>
+                        <form action="{{ route('users.assignToStudio', $user->id) }}" method="POST" class="d-inline-block">
+                            @csrf
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Add to Studio
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @else
+        <div class="alert alert-info text-center mt-4">
+            <strong>No users without a studio available.</strong>
         </div>
-    </div>
+    @endif
+</div>
 @endsection

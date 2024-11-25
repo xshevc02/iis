@@ -2,63 +2,65 @@
 
 @section('content')
     <div class="container">
-        <h1>Devices</h1>
+        <h1 class="text-center mb-4">Devices</h1>
 
         <!-- Success Message -->
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success text-center">
                 {{ session('success') }}
             </div>
         @endif
 
         <!-- Buttons Section -->
-        <div class="d-flex mb-3">
-            <a href="{{ route('devices.create') }}" class="btn btn-primary me-2">Add New Device</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <a href="{{ route('devices.create') }}" class="btn btn-primary me-2">Add New Device</a>
+                <a href="{{ route('device-types.index') }}" class="btn btn-secondary">Manage Device Types</a>
+            </div>
             @if(auth()->user()->can_make_reservations)
-                <a href="{{ route('reservations.create') }}" class="btn btn-primary">Make a Reservation</a>
+                <a href="{{ route('reservations.create') }}" class="btn btn-success">Make a Reservation</a>
             @else
-                <p class="text-danger">Ooops( You are not allowed to make reservations!</p>
+                <p class="text-danger mb-0">Oops! You are not allowed to make reservations.</p>
             @endif
         </div>
 
-        <!-- Devices Table -->
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Studio</th>
-                <th>Owner</th>
-                <th>Year of Manufacture</th>
-                <th>Available</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
+        <!-- Devices Cards -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
             @forelse($devices as $device)
-                <tr>
-                    <td>{{ $device->name }}</td>
-                    <td>{{ $device->type->type_name }}</td>
-                    <td>{{ $device->studio->name }}</td>
-                    <td>{{ $device->user->name ?? 'N/A' }}</td>
-                    <td>{{ $device->year_of_manufacture }}</td>
-                    <td>{{ $device->available ? 'Yes' : 'No' }}</td>
-                    <td>
-                        <a href="{{ route('devices.show', $device->id) }}" class="btn btn-info btn-sm">View</a>
-                        <a href="{{ route('devices.edit', $device->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('devices.destroy', $device->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this device?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">{{ $device->name }}</h5>
+                            <p class="card-text">
+                                <strong>Type:</strong> {{ $device->type->type_name }}<br>
+                                <strong>Studio:</strong> {{ $device->studio->name }}<br>
+                                <strong>Owner:</strong> {{ $device->user->name ?? 'N/A' }}<br>
+                                <strong>Year:</strong> {{ $device->year_of_manufacture }}<br>
+                                <strong>Available:</strong> {{ $device->available ? 'Yes' : 'No' }}
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ route('devices.show', $device->id) }}" class="btn btn-info btn-sm">View</a>
+                            @if (auth()->user()->role->name === 'administrator' || auth()->user()->role->name === 'instructor')
+                                <a href="{{ route('devices.edit', $device->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('devices.destroy', $device->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this device?');" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            @else
+                                <!-- Optional: Notification to users who cannot edit/delete devices -->
+                                <small class="text-muted d-block mt-1">No permission to modify this device.</small>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
             @empty
-                <tr>
-                    <td colspan="7" class="text-center">No devices found.</td>
-                </tr>
+                <div class="col-12">
+                    <p class="text-center text-muted">No devices found. Add some to get started!</p>
+                </div>
             @endforelse
-            </tbody>
-        </table>
+        </div>
     </div>
 @endsection

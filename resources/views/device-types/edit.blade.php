@@ -1,10 +1,43 @@
-<h1>Edit Device Type</h1>
-<form action="{{ route('device-types.update', $deviceType->id) }}" method="POST">
-    @csrf
-    @method('PUT')
-    <div class="form-group">
-        <label for="type_name">Device Type Name</label>
-        <input type="text" id="type_name" name="type_name" class="form-control" value="{{ $deviceType->type_name }}" required>
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Edit Device Type</h1>
+
+        <!-- Display Validation Errors -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <!-- Device Type Edit Form -->
+        <form action="{{ route('device-types.update', $deviceType->id) }}" method="POST" class="card p-4 shadow-sm">
+            @csrf
+            @method('PUT')
+
+            <!-- Device Type Name -->
+            <div class="form-group mb-3">
+                <label for="type_name" class="form-label">Device Type Name</label>
+                <input
+                    type="text"
+                    id="type_name"
+                    name="type_name"
+                    class="form-control"
+                    value="{{ old('type_name', $deviceType->type_name) }}"
+                    required
+                >
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-success me-2">Update Device Type</button>
+                <a href="{{ route('device-types.index') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary">Update Device Type</button>
-</form>
+@endsection
