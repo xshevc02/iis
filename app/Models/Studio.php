@@ -9,7 +9,7 @@ class Studio extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'location'];
+    protected $fillable = ['name', 'location',  'photo'];
 
     public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

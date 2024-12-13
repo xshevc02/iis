@@ -43,10 +43,8 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="card shadow-sm h-100">
                             <!-- Studio Image -->
-                            <img src="{{ $studio->image_url ?? asset('images/placeholder.jpg') }}"
-                                 class="card-img-top"
-                                 alt="{{ $studio->name }}"
-                                 style="height: 200px; object-fit: cover;">
+                            <img src="{{ Storage::url($studio->photo) ?: asset('images/placeholder.jpg') }}" alt="{{ $studio->name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+
 
                             <!-- Card Body -->
                             <div class="card-body">

@@ -18,7 +18,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('studios.store') }}" method="POST">
+                        <form action="{{ route('studios.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <!-- Studio Name -->
@@ -31,6 +31,12 @@
                             <div class="form-group mb-3">
                                 <label for="location">Studio Location</label>
                                 <input type="text" name="location" id="location" class="form-control" value="{{ old('location') }}" required>
+                            </div>
+
+                            <!-- Studio Photo -->
+                            <div class="form-group mb-3">
+                                <label for="photo">Studio Photo</label>
+                                <input type="file" name="photo" id="photo" class="form-control">
                             </div>
 
                             <button type="submit" class="btn btn-primary">Create Studio</button>
