@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\DeviceController;
@@ -114,3 +115,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
+Route::put('/profile', [UserController::class, 'update'])->name('profile.update');

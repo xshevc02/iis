@@ -18,38 +18,27 @@
         @endif
 
         @if ($users->count() > 0)
-            <ul class="list-group">
+            <div class="row g-4">
                 @foreach ($users as $user)
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <!-- Optional Avatar -->
-                            <img src="{{ $user->avatar_url ?? asset('default-avatar.png') }}"
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <!-- User Photo -->
+                            <img src="{{ Storage::url($user->photo ?? 'default-avatar.png') }}"
                                  alt="{{ $user->name }}"
-                                 class="rounded-circle me-3"
-                                 style="width: 50px; height: 50px;">
-                            <div>
-                                <h5 class="mb-1">{{ $user->name }}</h5>
-                                <p class="mb-0 text-muted small">
-                                    {{ $user->email }} <br>
-                                    Role: {{ $user->role->name ?? 'N/A' }} | Studio: {{ $user->studio->name ?? 'N/A' }}
+                                 class="card-img-top rounded-circle"
+                                 style="width: 100px; height: 100px; object-fit: cover; margin: 20px auto;">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{ $user->name }}</h5>
+                                <p class="card-text text-center">
+                                    <strong>Email:</strong> {{ $user->email }} <br>
+                                    <strong>Role:</strong> {{ $user->role->name ?? 'N/A' }} <br>
+                                    <strong>Studio:</strong> {{ $user->studio->name ?? 'N/A' }}
                                 </p>
                             </div>
                         </div>
-                        <div>
-                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning me-2">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </button>
-                            </form>
-                        </div>
-                    </li>
+                    </div>
                 @endforeach
-            </ul>
+            </div>
         @else
             <div class="alert alert-info text-center">
                 No users found. Click "Add User to Studio" to get started!

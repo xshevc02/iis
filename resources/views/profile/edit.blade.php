@@ -14,7 +14,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('profile.update') }}">
+                        <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -32,6 +32,16 @@
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                 @enderror
+                            </div>
+
+                            <!-- Profile Photo -->
+                            <div class="mb-3">
+                                <label for="photo" class="form-label">{{ __('Profile Photo') }}</label>
+                                <div class="mb-2">
+                                    <!-- Display current photo -->
+                                    <img src="{{ Storage::url($user->photo ?? 'default-avatar.png') }}" class="rounded-circle" style="width: 50px; height: 50px;">
+                                </div>
+                                <input type="file" name="photo" id="photo" class="form-control">
                             </div>
 
                             <div class="mb-3">

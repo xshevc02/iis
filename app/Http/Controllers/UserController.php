@@ -70,13 +70,22 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate the photo
         ]);
 
-        User::create([
+        $userData = [
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-        ]);
+        ];
+
+        // Handle file upload if present
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('profile_photos', 'public');
+            $userData['photo'] = $photoPath; // Save the photo path in the database
+        }
+
+        User::create($userData);
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -115,35 +124,41 @@ class UserController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = auth()->user();
 
         $validated = $request->validate([
-            'role_id' => 'nullable|exists:roles,id', // Allow null for restricted roles
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Check if the user is currently "registrovany uzivatel"
-        if ($user->role->name === 'registered user') {
-            // Allow changing role only to "instructor"
-            if (isset($validated['role_id'])) {
-                $newRole = Role::find($validated['role_id']);
-                if ($newRole->name === 'instructor' || $newRole->name === 'studio manager') {
-                    $user->role_id = $validated['role_id'];
-                } else {
-                    return redirect()->back()->withErrors(['error' => 'Role can only be changed to "instructor" for "registered user".']);
-                }
-            }
-        } elseif ($request->has('role_id')) {
-            return redirect()->back()->withErrors(['error' => 'Role cannot be changed for this user.']);
+        // Update user details
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        // Update password if provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validated['password']);
         }
 
-        // Update the "can_make_reservations" flag
-        $user->can_make_reservations = $request->has('can_make_reservations');
+        // Handle photo upload if a file is uploaded
+        if ($request->hasFile('photo')) {
+            // Delete old photo if it exists
+            if ($user->photo) {
+                Storage::delete('public/' . $user->photo);
+            }
+
+            // Store new photo
+            $photoPath = $request->file('photo')->store('profile_photos', 'public');
+            $user->photo = $photoPath;
+        }
 
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('profile.edit')->with('success', 'Profile updated successfully.');
     }
 
 

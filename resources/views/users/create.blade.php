@@ -1,41 +1,49 @@
 @extends('layouts.app')
+
 @section('content')
 
-<div class="container mt-4">
-    <h1 class="mb-4 text-center">Users Without Studio</h1>
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">Create User</h1>
 
-    @if ($usersWithoutStudio->count() > 0)
-        <table class="table table-striped table-bordered">
-            <thead class="table-light">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($usersWithoutStudio as $user)
-                <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->role->name ?? 'N/A' }}</td>
-                    <td>
-                        <form action="{{ route('users.assignToStudio', $user->id) }}" method="POST" class="d-inline-block">
-                            @csrf
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                Add to Studio
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    @else
-        <div class="alert alert-info text-center mt-4">
-            <strong>No users without a studio available.</strong>
-        </div>
-    @endif
-</div>
+        <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <!-- Name -->
+            <div class="form-group mb-3">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="form-control" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group mb-3">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" class="form-control" required>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group mb-3">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+
+            <!-- Profile Photo -->
+            <div class="form-group mb-3">
+                <label for="photo">Profile Photo</label>
+                <input type="file" name="photo" id="photo" class="form-control">
+            </div>
+
+            <!-- Role -->
+            <div class="form-group mb-3">
+                <label for="role_id">Role</label>
+                <select name="role_id" id="role_id" class="form-control" required>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create User</button>
+        </form>
+    </div>
+
 @endsection
