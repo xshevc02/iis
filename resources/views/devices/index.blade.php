@@ -29,6 +29,9 @@
             @forelse($devices as $device)
                 <div class="col">
                     <div class="card h-100 shadow-sm">
+                        <!-- Display the image if available, else display a default image -->
+                        <img src="{{ $device->photo ? Storage::url($device->photo) : asset('images/default_device.jpg') }}" class="card-img-top" alt="{{ $device->name }}">
+
                         <div class="card-body">
                             <h5 class="card-title text-center">{{ $device->name }}</h5>
                             <p class="card-text">
@@ -49,10 +52,8 @@
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
                             @else
-                                <!-- Optional: Notification to users who cannot edit/delete devices -->
                                 <small class="text-muted d-block mt-1">No permission to modify this device.</small>
                             @endif
-
                         </div>
                     </div>
                 </div>

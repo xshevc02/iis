@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Create a New Device</h1>
+        <h1 class="text-center mb-4">Create a New Device</h1>
 
         <!-- Display Validation Errors -->
         @if ($errors->any())
@@ -16,7 +16,7 @@
         @endif
 
         <!-- Device Creation Form -->
-        <form action="{{ route('devices.store') }}" method="POST">
+        <form action="{{ route('devices.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="name">Device Name</label>
@@ -74,6 +74,12 @@
                     <option value="1" {{ old('available') == '1' ? 'selected' : '' }}>Available</option>
                     <option value="0" {{ old('available') == '0' ? 'selected' : '' }}>Unavailable</option>
                 </select>
+            </div>
+
+            <!-- Device Photo Upload -->
+            <div class="form-group">
+                <label for="photo">Device Photo</label>
+                <input type="file" name="photo" id="photo" class="form-control">
             </div>
 
             <button type="submit" class="btn btn-primary">Create Device</button>
