@@ -13,7 +13,6 @@ class DeviceController extends Controller
 {
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type_id' => 'required|exists:device_types,id',
@@ -26,21 +25,26 @@ class DeviceController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Store the photo if it exists
+        // Check if a photo was uploaded
         if ($request->hasFile('photo')) {
+            // Store the image and get the file path
             $photoPath = $request->file('photo')->store('device_photos', 'public');
+
+            // Debugging: check the stored path
+            logger()->info("Uploaded photo path: " . $photoPath);
+
+            // Store the file path in the database
             $validated['photo'] = $photoPath;
         }
 
-        // Create the device using the validated data
-        Device::create($validated);
 
-        // Redirect to the devices index or any other appropriate page
+        $device = Device::create($validated);
+
         return redirect()->route('devices.index')->with('success', 'Device created successfully!');
     }
 
 
-public function index()
+    public function index()
 {
 // Fetch all devices from the database
 $devices = Device::all();

@@ -30,7 +30,7 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <!-- Display the image if available, else display a default image -->
-                        <img src="{{ $device->photo ? Storage::url($device->photo) : asset('images/default_device.jpg') }}" class="card-img-top" alt="{{ $device->name }}">
+                        <img src="{{ asset('storage/' . $device->photo) }}" class="card-img-top" alt="{{ $device->name }}">
 
                         <div class="card-body">
                             <h5 class="card-title text-center">{{ $device->name }}</h5>

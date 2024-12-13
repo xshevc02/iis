@@ -25,8 +25,7 @@ class Device extends Model
         'purchase_date',
         'max_loan_duration',
         'available',
-        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validace pro foto
-
+        'photo',
 
     ];
 
