@@ -16,6 +16,13 @@
                     <div class="card-body px-4 py-5">
                         <!-- Location Section -->
                         <div class="text-center mb-4">
+                            <!-- Studio Photo -->
+                            <div class="text-center my-4">
+                                <img src="{{ $studio->photo ? asset('storage/' . $studio->photo) : asset('images/placeholder.png') }}"
+                                     class="img-fluid"
+                                     alt="{{ $studio->name }}"
+                                     style="max-height: 300px; object-fit: cover; border-radius: 10px;">
+                            </div>
                             <h5 class="text-primary"><i class="fas fa-map-marker-alt"></i> Location</h5>
                             <p class="text-muted">{{ $studio->location }}</p>
                             <a

@@ -16,7 +16,11 @@
                         <p><strong>Device:</strong> {{ $reservation->device->name }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Reservation Date:</strong> {{ $reservation->reservation_date }}</p>
+                        <p>
+                            <strong>Reservation Date:</strong>
+                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                            {{ $reservation->reservation_date ? \Carbon\Carbon::parse($reservation->reservation_date)->format('jS F Y') : 'N/A' }}
+                        </p>
                         <p><strong>Duration:</strong> {{ $reservation->duration }} days</p>
                     </div>
                 </div>
@@ -29,6 +33,9 @@
 
             <!-- Actions -->
             <div class="card-footer bg-light text-center py-3">
+                <a href="{{ route('reservations.index') }}" class="btn btn-secondary mx-2" aria-label="Back to Reservations">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
                 <a href="{{ route('reservations.edit', $reservation->id) }}" class="btn btn-warning mx-2" aria-label="Edit Reservation">
                     <i class="fas fa-edit"></i> Edit
                 </a>
@@ -39,9 +46,7 @@
                         <i class="fas fa-trash-alt"></i> Delete
                     </button>
                 </form>
-                <a href="{{ route('reservations.index') }}" class="btn btn-secondary mx-2" aria-label="Back to Reservations">
-                    <i class="fas fa-arrow-left"></i> Back to List
-                </a>
+
             </div>
         </div>
     </div>
