@@ -10,11 +10,18 @@ class StudiosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        $studios = Studio::all();
-        return view('studios.index', compact('studios'));
+        $search = $request->input('search'); // Retrieve the 'search' query parameter
+
+        // Use the `search` scope to filter results
+        $studios = Studio::search($search); // Paginate results for better usability
+
+        return view('studios.index', compact('studios', 'search')); // Pass $studios and $search to the view
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -83,6 +90,7 @@ class StudiosController extends Controller
     {
         try {
             $studio->delete();
+
             return redirect()->route('studios.index')->with('success', 'Studio deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->route('studios.index')->with('error', 'Unable to delete studio. It may be linked to other records.');
