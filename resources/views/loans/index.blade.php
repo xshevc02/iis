@@ -81,7 +81,12 @@
             <div class="row">
                 @foreach($loans as $loan)
                     <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card shadow-sm h-100">
+                        <a href="{{ route('loans.show', $loan->id) }}" class="card shadow-sm h-100 text-decoration-none text-dark">
+                            <!-- Device Image -->
+                            <img src="{{ $loan->device->photo ? asset('storage/' . $loan->device->photo) : asset('images/placeholder-device.png') }}"
+                                 alt="{{ $loan->device->name }}"
+                                 class="card-img-top"
+                                 style="height: 200px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $loan->device->name }}</h5>
                                 <p class="text-muted mb-2">
@@ -101,24 +106,7 @@
                                     {{ ucfirst($loan->status) }}
                                 </span>
                             </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                <a href="{{ route('loans.show', $loan->id) }}" class="btn btn-sm btn-info">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                                @if(auth()->user()->role->name === 'administrator')
-                                    <a href="{{ route('loans.edit', $loan->id) }}" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <form action="{{ route('loans.destroy', $loan->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this loan?')">
-                                            <i class="fas fa-trash-alt"></i> Delete
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 @endforeach
             </div>
@@ -127,8 +115,6 @@
                 No loans found. Click "Add Loan" to create one!
             </div>
         @endif
-
-
     </div>
 @endsection
 
@@ -140,15 +126,30 @@
             border-radius: 10px;
             background: #fff;
             overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
         .card-body {
             padding: 15px;
         }
 
-        .card-footer {
-            background: #f8f9fa;
-            padding: 10px;
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .badge {
+            font-size: 1rem;
+            padding: 0.5em;
+        }
+
+        .card-img-top {
+            border-bottom: 1px solid #ddd;
         }
     </style>
 @endpush

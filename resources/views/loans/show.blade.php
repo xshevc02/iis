@@ -7,7 +7,7 @@
         <!-- Loan Card -->
         <div class="card shadow-lg border-0 rounded">
             <div class="card-header bg-primary text-white text-center py-3">
-                <h4 class="mb-0">Loan #{{ $loan->id }}</h4>
+                <h4 class="mb-0">Loan</h4>
             </div>
             <div class="card-body px-5 py-4">
                 <div class="row mb-4">
