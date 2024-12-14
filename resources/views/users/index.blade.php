@@ -1,9 +1,13 @@
+{{--
+    Author: Veronika Novikova
+    Login: xnovik03
+--}}
 @extends('layouts.app')
 
 @section('content')
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Community</h1>
+            <h1 class="mb-0" style="font-weight: bold; font-size: 2.5rem; color: #2D2D2D;">Community</h1>
         </div>
 
         @if ($errors->any())

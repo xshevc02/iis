@@ -1,10 +1,14 @@
+{{--
+    Author: Veronika Novikova
+    Login: xnovik03
+--}}
 @extends('layouts.app')
 
 @section('content')
     <div class="container py-5">
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Reservations</h1>
+            <h1 style="font-size: 2.5rem; font-weight: bold; color: #2D2D2D;">Reservations</h1>
             <a href="{{ route('reservations.create') }}" class="btn" style="background-color: #85D177; font-weight: bold;">
                 Add Reservation
             </a>

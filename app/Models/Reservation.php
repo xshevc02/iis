@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Veronika Novikova
+ * xnovik03
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;

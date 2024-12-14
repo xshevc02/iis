@@ -1,3 +1,7 @@
+{{--
+    Author: Anna Shevchenko
+    Login: xshevc02
+--}}
 @extends('layouts.app')
 
 @section('content')

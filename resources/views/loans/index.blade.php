@@ -1,10 +1,14 @@
+{{--
+    Author: Anna Shevchenko
+    Login: xshevc02
+--}}
 @extends('layouts.app')
 
 @section('content')
     <div class="container">
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Loans</h1>
+            <h1 style="font-size: 2.5rem; font-weight: bold; color: #2D2D2D;">Loans</h1>
             @if(auth()->user()->role->name === 'administrator')
                 <a href="{{ route('loans.create') }}" class="btn" style="background-color: #85D177; font-weight: bold;">
                     Add Loan

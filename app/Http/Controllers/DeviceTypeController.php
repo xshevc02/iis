@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Anna Shevchenko
+ * xshevc02
+ */
 namespace App\Http\Controllers;
 
 use App\Models\DeviceType;
@@ -10,7 +13,7 @@ class DeviceTypeController extends Controller
     // Display a listing of device types
     public function index()
     {
-        $deviceTypes = DeviceType::all(); // 10 items per page
+        $deviceTypes = DeviceType::all();
 
         return view('device-types.index', compact('deviceTypes'));
     }

@@ -1,7 +1,11 @@
+{{--
+    Author: Anna Shevchenko
+    Login: xshevc02
+--}}
 @extends('layouts.app')
 
 @section('content')
-    <div class="container py-5" style="background: linear-gradient(to bottom, #f9f9f9, #e6f0ff); border-radius: 12px; padding: 2rem;">
+    <div class="container py-5" style=" border-radius: 12px; padding: 2rem;">
         <!-- Header Section -->
         <div class="row mb-4">
             <div class="col text-center">
@@ -85,9 +89,7 @@
 
 @push('styles')
     <style>
-        body {
-            background: linear-gradient(to bottom, #f8f9fa, #e9ecef); /* Light grey to match home style */
-        }
+
 
         .card {
             border-radius: 15px;

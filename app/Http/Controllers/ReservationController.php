@@ -1,4 +1,8 @@
 <?php
+/**
+ * Veronika Novikova
+ * xnovik03
+ */
 
 namespace App\Http\Controllers;
 
@@ -15,7 +19,7 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
-        if (!in_array(session('role_id'), [1, 2, 3, 4])) {
+        if (! in_array(session('role_id'), [1, 2, 3, 4])) {
             return redirect()->route('no-access');
         }
 
@@ -33,7 +37,7 @@ class ReservationController extends Controller
         $reservations = Reservation::where('user_id', $user->id)
             ->when($search, function ($query, $search) {
                 $query->whereHas('device', function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%');
+                    $q->where('name', 'like', '%'.$search.'%');
                 });
             })
             ->when($status, function ($query, $status) {
@@ -46,8 +50,6 @@ class ReservationController extends Controller
 
         return view('reservations.index', compact('reservations', 'search', 'status', 'date'));
     }
-
-
 
     /**
      * Show the form for creating a new reservation.

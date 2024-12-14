@@ -1,4 +1,8 @@
 <?php
+/**
+ * Anna Shevchenko
+ * xshevc02
+ */
 
 namespace App\Models;
 
@@ -69,7 +73,7 @@ class User extends Authenticatable
         });
     }
 
-   // public mixed $role_id;
+    // public mixed $role_id;
 
     public function studio(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

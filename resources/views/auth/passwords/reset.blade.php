@@ -1,3 +1,7 @@
+{{--
+    Author: Veronika Novikova
+    Login: xnovik03
+--}}
 @extends('layouts.app')
 
 @section('content')
