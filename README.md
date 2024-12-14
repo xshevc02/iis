@@ -1,4 +1,4 @@
-# DeviceHub - Community Resource Sharing Platform
+# DeviceHub - Community Resource Sharing Platform - xshevc02 & xnovik03
 
 ## Overview
 DeviceHub is a platform that connects people, enabling users to share and borrow devices and equipment easily. The application supports device management, studio management, reservations, and loans, while offering a dashboard for users to manage their interactions efficiently.
@@ -35,7 +35,7 @@ DeviceHub is a platform that connects people, enabling users to share and borrow
   - **`dashboard.blade.php`**: Dashboard page (authored by Anna Shevchenko).
   - **`studios/`**: Views for studio management (authored by Veronika Novikova).
   - **`reservations/`**: Views for reservation management (authored by Veronika Novikova).
-  - **`home.blade.php`**: Home page layout and content (authored by Veronika Novikova).
+  - **`index.blade.php`**: Home page layout and content (authored by Veronika Novikova).
 - **`public/`**: Public assets such as images, CSS, and JS.
 - **`routes/`**: Defines all application routes.
   - **`web.php`**: Key routes for web views.
@@ -45,7 +45,7 @@ DeviceHub is a platform that connects people, enabling users to share and borrow
 
 ## Authors
 - **Anna Shevchenko**: Devices, Device Types, Loans, Dashboard Pages
-- **Veronika Novikova**: Studios, Reservations, Home Pages
+- **Veronika Novikova**: Studios, Reservations, Index Pages
 
 ---
 
