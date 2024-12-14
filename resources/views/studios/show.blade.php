@@ -45,13 +45,7 @@
                         <a href="{{ route('studios.edit', $studio->id) }}" class="btn btn-primary mx-2">
                             <i class="fas fa-edit"></i> Edit Studio
                         </a>
-                        <form action="{{ route('studios.destroy', $studio->id) }}" method="POST" class="d-inline mx-2">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this studio?')">
-                                <i class="fas fa-trash-alt"></i> Delete Studio
-                            </button>
-                        </form>
+
                     </div>
                 </div>
             </div>

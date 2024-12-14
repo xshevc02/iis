@@ -1,13 +1,13 @@
-{{--
-    Author: Anna Shevchenko
+{{-- Author: Anna Shevchenko
     Login: xshevc02
 --}}
+
 @extends('layouts.app')
 
 @section('content')
     <div class="container">
         <h1>Edit Device</h1>
-        <form action="{{ route('devices.update', $device->id) }}" method="POST">
+        <form action="{{ route('devices.update', $device->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -41,6 +41,17 @@
             <div class="form-group">
                 <label for="available">Available</label>
                 <input type="checkbox" name="available" id="available" value="1" {{ $device->available ? 'checked' : '' }}>
+            </div>
+
+            <!-- Device Photo Upload -->
+            <div class="form-group">
+                <label for="photo">Device Photo</label>
+                @if ($device->photo)
+                    <div>
+                        <img src="{{ Storage::url($device->photo) }}" alt="Device Image" style="max-width: 100px; max-height: 100px;">
+                    </div>
+                @endif
+                <input type="file" name="photo" id="photo" class="form-control">
             </div>
 
             <button type="submit" class="btn btn-primary">Update Device</button>

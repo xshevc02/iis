@@ -32,19 +32,14 @@ class DeviceController extends Controller
         if ($request->hasFile('photo')) {
             // Store the image and get the file path
             $photoPath = $request->file('photo')->store('device_photos', 'public');
-
-            // Debugging: check the stored path
-            logger()->info('Uploaded photo path: '.$photoPath);
-
-            // Store the file path in the database
             $validated['photo'] = $photoPath;
         }
 
+        // Create the device with the validated data (including photo if uploaded)
         $device = Device::create($validated);
 
         return redirect()->route('devices.index')->with('success', 'Device created successfully!');
     }
-
     public function index(Request $request)
     {
         $deviceType = $request->input('device_type');
@@ -73,10 +68,7 @@ class DeviceController extends Controller
 
     public function update(Request $request, Device $device)
     {
-        // Logování pro ladění
-        logger()->info('Update Device Request Data:', $request->all());
-
-        // Validace
+        // Validate incoming data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type_id' => 'required|exists:device_types,id',
@@ -84,13 +76,21 @@ class DeviceController extends Controller
             'available' => 'nullable|boolean',
         ]);
 
-        // Pokud checkbox "available" není zaškrtnutý, nastavíme hodnotu na false
-        $validated['available'] = $request->has('available');
+        // If a new photo is uploaded, store it and update the photo path
+        if ($request->hasFile('photo')) {
+            // Delete the old photo if needed
+            if ($device->photo) {
+                Storage::disk('public')->delete($device->photo);
+            }
 
-        // Aktualizace zařízení
+            // Store the new photo and update the photo path
+            $photoPath = $request->file('photo')->store('device_photos', 'public');
+            $validated['photo'] = $photoPath;
+        }
+
+        // Update the device with the validated data (including new photo if uploaded)
         $device->update($validated);
 
-        // Přesměrování zpět s potvrzením
         return redirect()->route('devices.index')->with('success', 'Device updated successfully!');
     }
 
