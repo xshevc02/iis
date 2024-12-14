@@ -27,8 +27,15 @@
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary w-100">Filter</button>
                 </div>
+                <p>Showing reservations filtered by:
+                    @if(request('search')) Search: "{{ request('search') }}", @endif
+                    @if(request('status')) Status: "{{ request('status') }}", @endif
+                    @if(request('date')) Date: "{{ request('date') }}" @endif
+                </p>
+
             </div>
         </form>
+
 
 
 

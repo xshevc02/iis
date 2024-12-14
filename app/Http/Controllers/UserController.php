@@ -15,24 +15,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        $authUser = auth()->user(); // Get the authenticated user
+        $authUser = auth()->user();
 
-        // Check the role of the authenticated user
-        if ($authUser->role->name === 'administrator') {
-            // Admin can see all users
+        if (session('role_id') == '1') {
             $users = User::with(['role', 'studio'])->get();
-        } elseif ($authUser->role->name === 'studio manager') {
-            // Manager can only see users from their studio
+        } elseif (session('role_id') == '2' || session('role_id') == '3') {
             $users = User::with(['role', 'studio'])
                 ->where('studio_id', $authUser->studio_id)
                 ->get();
         } else {
-            // For other roles, deny access
-            abort(403, 'You do not have access to this resource.');
+            return redirect()->route('no-access');
         }
 
-        $roles = Role::all(); // Fetch all roles
-        $studios = Studio::all(); // Fetch all studios
+        $roles = Role::all();
+        $studios = Studio::all();
 
         return view('users.index', compact('users', 'roles', 'studios'));
     }
@@ -120,9 +116,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $roles = Role::all(); // Fetch all roles
+
         return view('users.edit', compact('user', 'roles'));
     }
-
 
     public function update(Request $request)
     {
@@ -130,7 +126,7 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -148,7 +144,7 @@ class UserController extends Controller
         if ($request->hasFile('photo')) {
             // Delete old photo if it exists
             if ($user->photo) {
-                Storage::delete('public/' . $user->photo);
+                Storage::delete('public/'.$user->photo);
             }
 
             // Store new photo
@@ -160,7 +156,6 @@ class UserController extends Controller
 
         return redirect()->route('profile.edit')->with('success', 'Profile updated successfully.');
     }
-
 
     public function toggleReservationAccess($id)
     {

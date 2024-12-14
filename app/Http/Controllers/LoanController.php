@@ -6,7 +6,6 @@ use App\Models\Device;
 use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LoanController extends Controller
 {
@@ -15,8 +14,11 @@ class LoanController extends Controller
      */
     public function index()
     {
-        // Get the authenticated user
-        $user = auth()->user();
+        if (! in_array(session('role_id'), ['1', '2', '3', '4'])) {
+            return redirect()->route('no-access');
+        }
+
+        $user = auth()->user(); // Get the authenticated user
         $loans = Loan::where('user_id', $user->id)->get();
 
         return view('loans.index', compact('loans'));

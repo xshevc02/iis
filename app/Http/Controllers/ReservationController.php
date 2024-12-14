@@ -13,16 +13,41 @@ class ReservationController extends Controller
     /**
      * Display a listing of reservations.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = auth()->user(); // Get the authenticated user
+        if (!in_array(session('role_id'), [1, 2, 3, 4])) {
+            return redirect()->route('no-access');
+        }
 
-        // Fetch only the reservations of the authenticated user
-        $reservations = Reservation::where('user_id', $user->id)->get();
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+            'status' => 'nullable|in:active,pending,cancelled',
+            'date' => 'nullable|date',
+        ]);
 
-        // Pass the reservations to the view
-        return view('reservations.index', compact('reservations'));
+        $user = auth()->user();
+        $search = $request->input('search');
+        $status = $request->input('status');
+        $date = $request->input('date');
+
+        $reservations = Reservation::where('user_id', $user->id)
+            ->when($search, function ($query, $search) {
+                $query->whereHas('device', function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%');
+                });
+            })
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->when($date, function ($query, $date) {
+                $query->whereDate('reservation_date', $date);
+            })
+            ->get();
+
+        return view('reservations.index', compact('reservations', 'search', 'status', 'date'));
     }
+
+
 
     /**
      * Show the form for creating a new reservation.

@@ -43,76 +43,9 @@ Route::middleware(['auth'])->group(function () {
         return view('no-access');
     })->name('no-access');
 
-    Route::get('/Reservations', function () {
-        if (session('role_id') == '1' || session('role_id') == '2' || session('role_id') == '3' || session('role_id') == '4') {
-            $user = auth()->user(); // Get the authenticated user
-
-            // Fetch only the reservations of the authenticated user
-            $reservations = Reservation::where('user_id', $user->id)->get();
-
-            // Pass the reservations to the view
-            return view('reservations.index', compact('reservations'));
-        } else {
-            return redirect()->route('no-access');
-        }
-    })->name('reservations.index');
-
-    Route::get('/Devices', function () {
-        if (session('role_id') == '1' || session('role_id') == '2' || session('role_id') == '3' || session('role_id') == '4') {
-            $devices = Device::all();
-
-            return view('devices.index', compact('devices'));
-        } else {
-            return redirect()->route('no-access');
-        }
-    })->name('devices.index');
-
-    Route::get('/Users', function () {
-        $authUser = auth()->user(); // Get the authenticated user
-
-        if (session('role_id') == '1') { // Admin role
-            $users = User::with(['role', 'studio'])->get();
-        } elseif (session('role_id') == '2' || session('role_id') == '3') { // Manager or teacher roles
-            $users = User::with(['role', 'studio'])
-                ->where('studio_id', $authUser->studio_id)
-                ->get();
-        } else {
-            return redirect()->route('no-access'); // Redirect for unauthorized roles
-        }
-
-        $roles = Role::all(); // Fetch all roles
-        $studios = Studio::all(); // Fetch all studios
-
-        return view('users.index', compact('users', 'roles', 'studios'));
-    })->name('users.index');
-
-    Route::get('/Loans', function () {
-        if (session('role_id') == '1' || session('role_id') == '2' || session('role_id') == '3' || session('role_id') == '4') {
-            // Get the authenticated user
-            $user = auth()->user();
-            $loans = Loan::where('user_id', $user->id)->get();
-
-            return view('loans.index', compact('loans'));
-        } else {
-            return redirect()->route('no-access');
-        }
-    })->name('loans.index');
-
-    Route::get('/Studio', function () {
-        if (session('role_id') == '1' || session('role_id') == '2') {
-            $studios = Studio::all();
-
-            return view('studios.index', compact('studios'));
-        } else {
-            return redirect()->route('no-access');
-        }
-    })->name('studios.index');
-
-
 
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
-Route::put('/profile', [UserController::class, 'update'])->name('profile.update');
