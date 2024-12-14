@@ -6,7 +6,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Loans</h1>
             @if(auth()->user()->role->name === 'administrator')
-                <a href="{{ route('loans.create') }}" class="btn btn-success">Add Loan</a>
+                <a href="{{ route('loans.create') }}" class="btn" style="background-color: #85D177; font-weight: bold;">
+                    Add Loan
+                </a>
             @endif
         </div>
 

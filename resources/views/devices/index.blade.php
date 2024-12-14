@@ -3,11 +3,26 @@
 @section('content')
     <div class="container py-5">
         <!-- Page Header -->
-        <div class="text-center mb-5">
-            <h1 class="text-white py-4" style="background: linear-gradient(90deg, #aabfeb, #577ef1); border-radius: 10px;">
-                Devices
-            </h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0" style="color: #2D2D2D; font-weight: bold;">Devices</h1>
+            <div>
+                <!-- Add New Device Button -->
+                <a href="{{ route('devices.create') }}" class="btn" style="background-color: #A8DFFF; color: #2D2D2D; border-radius: 8px; font-weight: bold;">
+                    <i class="fas fa-plus"></i> Add New Device
+                </a>
+
+                <!-- Manage Device Types Button -->
+                <a href="{{ route('device-types.index') }}" class="btn" style="background-color: #B3E7A8; color: #2D2D2D; border-radius: 8px; font-weight: bold;">
+                    <i class="fas fa-cogs"></i> Manage Device Types
+                </a>
+
+                <!-- Make a Reservation Button -->
+                <a href="{{ route('reservations.create') }}" class="btn" style="background-color: #D9A8FF; color: #2D2D2D; border-radius: 8px; font-weight: bold;">
+                    <i class="fas fa-calendar-check"></i> Make a Reservation
+                </a>
+            </div>
         </div>
+
 
         <!-- Success Message -->
         @if(session('success'))
@@ -16,29 +31,7 @@
             </div>
         @endif
 
-        <!-- Buttons Section -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <!-- Add New Device Button -->
-                <a href="{{ route('devices.create') }}" class="btn btn-primary me-2">
-                    <i class="fas fa-plus"></i> Add New Device
-                </a>
 
-                <!-- Manage Device Types Button -->
-                <a href="{{ route('device-types.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-cogs"></i> Manage Device Types
-                </a>
-            </div>
-
-            <!-- Make a Reservation Button -->
-            @if(auth()->user()->can_make_reservations)
-                <a href="{{ route('reservations.create') }}" class="btn btn-success">
-                    <i class="fas fa-calendar-check"></i> Make a Reservation
-                </a>
-            @else
-                <p class="text-danger mb-0"><i class="fas fa-exclamation-circle"></i> You are not allowed to make reservations.</p>
-            @endif
-        </div>
 
         <!-- Filter Section -->
         <form method="GET" action="{{ route('devices.index') }}" class="mb-4">
@@ -56,7 +49,9 @@
                 </div>
                 <!-- Filter Button -->
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    <button type="submit" class="btn w-100" style="background: #4A90E2; color: white; font-weight: bold;">
+                        Filter
+                    </button>
                 </div>
             </div>
         </form>
@@ -66,16 +61,16 @@
             @forelse($devices as $device)
                 <div class="col">
                     <!-- Clickable Card -->
-                    <a href="{{ route('devices.show', $device->id) }}" class="card h-100 shadow-sm text-decoration-none text-dark">
+                    <a href="{{ route('devices.show', $device->id) }}" class="card h-100 shadow-sm text-decoration-none text-dark" style=" border-radius: 15px;">
                         <!-- Display the image if available, else display a default placeholder -->
                         <img src="{{ $device->photo ? asset('storage/' . $device->photo) : asset('images/placeholder-device.png') }}"
                              class="card-img-top"
                              alt="{{ $device->name }}"
-                             style="height: 200px; object-fit: cover;">
+                             style="height: 200px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
 
                         <div class="card-body">
-                            <h5 class="card-title text-center">{{ $device->name }}</h5>
-                            <p class="card-text">
+                            <h5 class="card-title text-center" style="color: #2D2D2D;">{{ $device->name }}</h5>
+                            <p class="card-text" style="color: #2D2D2D;">
                                 <strong>Type:</strong> {{ $device->type->type_name }}<br>
                                 <strong>Studio:</strong> {{ $device->studio->name }}<br>
                                 <strong>Year:</strong> {{ $device->year_of_manufacture }}<br>
@@ -108,6 +103,15 @@
         .card:hover {
             transform: scale(1.02); /* Slight zoom on hover */
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            transition: all 0.3s ease;
         }
     </style>
 @endpush

@@ -5,7 +5,9 @@
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Reservations</h1>
-            <a href="{{ route('reservations.create') }}" class="btn btn-success">Add Reservation</a>
+            <a href="{{ route('reservations.create') }}" class="btn" style="background-color: #85D177; font-weight: bold;">
+                Add Reservation
+            </a>
         </div>
 
         <!-- Filter Form -->
@@ -55,7 +57,6 @@
                                 </small>
                             </div>
                             <p class="mb-1 text-muted">
-                                <strong>User:</strong> {{ $reservation->user->name }}<br>
                                 <strong>Duration:</strong> {{ $reservation->duration }} days
                             </p>
                             <span class="badge

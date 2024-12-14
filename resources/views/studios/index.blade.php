@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Studios</h1>
-            <a href="{{ route('studios.create') }}" class="btn btn-primary">Create New Studio</a>
+            <h1 class="mb-0" style="color: #2D2D2D; font-weight: bold;">Studios</h1>
+            <a href="{{ route('studios.create') }}" class="btn" style="background: #A8DFFF; color: #2D2D2D; font-weight: bold; border-radius: 8px;">
+                Create New Studio
+            </a>
         </div>
 
         <!-- Success Message -->
@@ -25,7 +27,7 @@
         <form method="GET" action="{{ route('studios.index') }}" class="mb-4">
             <div class="input-group">
                 <input type="text" name="search" class="form-control" placeholder="Search by name or location" value="{{ $search ?? '' }}">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn " type="submit" style="background: #85D177; color: #2D2D2D; font-weight: bold;">
                     <i class="fas fa-search"></i> Search
                 </button>
             </div>
@@ -52,8 +54,8 @@
 
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ $studio->name }}</h5>
-                                    <p class="card-text">
+                                    <h5 class="card-title" style="color: #2D2D2D; font-weight: bold;">{{ $studio->name }}</h5>
+                                    <p class="card-text" style="color: #2D2D2D;">
                                         <strong>Location:</strong> {{ $studio->location }}
                                     </p>
                                 </div>
@@ -68,9 +70,14 @@
 
 @push('styles')
     <style>
+        body {
+            background: linear-gradient(to bottom, #f8f9fa, #e9ecef); /* Light and subtle background */
+        }
+
         .card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .card:hover {
@@ -79,13 +86,35 @@
         }
 
         .card img {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
 
         .card-title {
             font-size: 1.25rem;
             font-weight: bold;
         }
+
+        .btn-primary,
+        .btn-success {
+            font-weight: bold;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            outline: none; /* Removes default blue outline */
+            border: none; /* Removes any border */
+            box-shadow: none; /* Removes shadow effect */
+        }
+
+        .btn-primary:hover,
+        .btn-success:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:focus,
+        .btn-success:focus {
+            outline: none; /* Removes focus outline */
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Adds a subtle focus ring */
+        }
+
     </style>
 @endpush

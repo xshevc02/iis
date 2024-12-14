@@ -24,8 +24,10 @@
         <div class="container flex justify-center items-center">
             <!-- Branding -->
             <a class="navbar-brand absolute left-0" href="{{ url('/') }}">
-                {{ config('app.name', 'hahah') }}
+                <i class="fas fa-cubes"></i> <!-- Cool ikona -->
+                {{ config('DeviceHub', 'DeviceHub') }}
             </a>
+
 
             <!-- Menu Items -->
             <ul class="navbar-nav space-x-4">
