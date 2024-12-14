@@ -4,7 +4,7 @@
     <div class="container py-5">
         <!-- Page Header -->
         <div class="text-center mb-5">
-            <h1 class="text-white py-4" style="background: linear-gradient(90deg, #007bff, #0056b3); border-radius: 10px;">
+            <h1 class="text-white py-4" style="background: linear-gradient(90deg, #aabfeb, #577ef1); border-radius: 10px;">
                 Devices
             </h1>
         </div>
@@ -19,13 +19,18 @@
         <!-- Buttons Section -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
+                <!-- Add New Device Button -->
                 <a href="{{ route('devices.create') }}" class="btn btn-primary me-2">
                     <i class="fas fa-plus"></i> Add New Device
                 </a>
+
+                <!-- Manage Device Types Button -->
                 <a href="{{ route('device-types.index') }}" class="btn btn-secondary">
                     <i class="fas fa-cogs"></i> Manage Device Types
                 </a>
             </div>
+
+            <!-- Make a Reservation Button -->
             @if(auth()->user()->can_make_reservations)
                 <a href="{{ route('reservations.create') }}" class="btn btn-success">
                     <i class="fas fa-calendar-check"></i> Make a Reservation
@@ -35,11 +40,33 @@
             @endif
         </div>
 
+        <!-- Filter Section -->
+        <form method="GET" action="{{ route('devices.index') }}" class="mb-4">
+            <div class="row g-2">
+                <!-- Filter by Device Type -->
+                <div class="col-md-4">
+                    <select name="device_type" class="form-select">
+                        <option value="">All Types</option>
+                        @foreach($deviceTypes as $type)
+                            <option value="{{ $type->id }}" {{ request('device_type') == $type->id ? 'selected' : '' }}>
+                                {{ $type->type_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <!-- Filter Button -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </div>
+        </form>
+
         <!-- Devices Cards -->
         <div class="row row-cols-1 row-cols-md-3 g-4">
             @forelse($devices as $device)
                 <div class="col">
-                    <div class="card h-100 shadow-sm">
+                    <!-- Clickable Card -->
+                    <a href="{{ route('devices.show', $device->id) }}" class="card h-100 shadow-sm text-decoration-none text-dark">
                         <!-- Display the image if available, else display a default placeholder -->
                         <img src="{{ $device->photo ? asset('storage/' . $device->photo) : asset('images/placeholder-device.png') }}"
                              class="card-img-top"
@@ -61,26 +88,7 @@
                             </p>
                             </p>
                         </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center">
-                            <a href="{{ route('devices.show', $device->id) }}" class="btn btn-info btn-sm">
-                                <i class="fas fa-eye"></i> View
-                            </a>
-                            @if (auth()->user()->role->name === 'administrator' || auth()->user()->role->name === 'instructor')
-                                <a href="{{ route('devices.edit', $device->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <form action="{{ route('devices.destroy', $device->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this device?')">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                </form>
-                            @else
-                                <small class="text-muted d-block mt-1"><i class="fas fa-lock"></i> No permission to modify.</small>
-                            @endif
-                        </div>
-                    </div>
+                    </a>
                 </div>
             @empty
                 <div class="col-12">
@@ -90,3 +98,16 @@
         </div>
     </div>
 @endsection
+
+@push('styles')
+    <style>
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.02); /* Slight zoom on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+        }
+    </style>
+@endpush

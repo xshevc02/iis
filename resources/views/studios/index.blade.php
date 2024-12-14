@@ -41,41 +41,51 @@
             <div class="row g-4">
                 @foreach ($studios as $studio)
                     <div class="col-md-6 col-lg-4">
-                        <div class="card shadow-sm h-100">
-                            <!-- Studio Image -->
-                            <img src="{{ Storage::url($studio->photo) ?: asset('images/placeholder.jpg') }}" alt="{{ $studio->name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        <!-- Clickable Card -->
+                        <a href="{{ route('studios.show', $studio->id) }}" class="text-decoration-none">
+                            <div class="card shadow-sm h-100">
+                                <!-- Studio Image -->
+                                <img src="{{ $studio->photo ? Storage::url($studio->photo) : asset('images/placeholder.jpg') }}"
+                                     alt="{{ $studio->name }}"
+                                     class="card-img-top"
+                                     style="height: 200px; object-fit: cover;">
 
-
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $studio->name }}</h5>
-                                <p class="card-text">
-                                    <strong>Location:</strong> {{ $studio->location }}
-                                </p>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $studio->name }}</h5>
+                                    <p class="card-text">
+                                        <strong>Location:</strong> {{ $studio->location }}
+                                    </p>
+                                </div>
                             </div>
-
-                            <!-- Card Footer -->
-                            <div class="card-footer d-flex justify-content-between">
-                                <a href="{{ route('studios.show', $studio->id) }}" class="btn btn-sm btn-primary" aria-label="View Studio">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                                <a href="{{ route('studios.edit', $studio->id) }}" class="btn btn-sm btn-warning" aria-label="Edit Studio">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <form action="{{ route('studios.destroy', $studio->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" aria-label="Delete Studio">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 @endforeach
             </div>
-
-
         @endif
     </div>
 @endsection
+
+@push('styles')
+    <style>
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .card:hover {
+            transform: scale(1.02); /* Slight zoom on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+        }
+
+        .card img {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+    </style>
+@endpush

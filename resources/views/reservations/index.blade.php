@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container py-5">
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Reservations</h1>
             <a href="{{ route('reservations.create') }}" class="btn btn-success">Add Reservation</a>
         </div>
+
         <!-- Filter Form -->
         <form method="GET" action="{{ route('reservations.index') }}" class="mb-4">
             <div class="row g-2">
@@ -16,111 +17,81 @@
                 <div class="col-md-3">
                     <select name="status" class="form-select">
                         <option value="">All Statuses</option>
-                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        <option value="Approved" {{ request('status') == 'Active' ? 'selected' : '' }}>Active</option>
+                        <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="Cancelled" {{ request('status') == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input type="date" name="date" class="form-control" value="{{ request('date') }}">
+                    <input type="date" name="date" class="form-control" value="{{ request('date') ? \Carbon\Carbon::parse(request('date'))->format('Y-m-d') : '' }}">
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary w-100">Filter</button>
                 </div>
-                <p>Showing reservations filtered by:
-                    @if(request('search')) Search: "{{ request('search') }}", @endif
-                    @if(request('status')) Status: "{{ request('status') }}", @endif
-                    @if(request('date')) Date: "{{ request('date') }}" @endif
-                </p>
-
             </div>
         </form>
 
-
-
-
-
-        <!-- Reservation Cards -->
-        @if($reservations->count() > 0)
-            <div class="row">
-                @foreach($reservations as $reservation)
-                    <div class="col-12 mb-3">
-                        <div class="card reservation-card shadow-sm">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <!-- Left Section -->
-                                <div>
-                                    <h5 class="mb-1">{{ $reservation->device->name }}</h5>
-                                    <p class="mb-1 text-muted">
-                                        <strong>User:</strong> {{ $reservation->user->name }}
-                                    </p>
-                                    <p class="mb-0 text-muted">
-                                        <strong>Date:</strong> {{ $reservation->reservation_date }} <br>
-                                        <strong>Duration:</strong> {{ $reservation->duration }} days
-                                    </p>
-                                </div>
-
-                                <!-- Middle Section -->
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="reservation-status
-                                        @if($reservation->status == 'active') text-success
-                                        @elseif($reservation->status == 'pending') text-warning
-                                        @else text-danger
-                                        @endif">
-                                        {{ ucfirst($reservation->status) }}
-                                    </span>
-                                    <hr class="my-2 w-75">
-                                    <p class="text-muted small mb-0">#{{ $reservation->id }}</p>
-                                </div>
-
-                                <!-- Right Section -->
-                                <div>
-                                    <a href="{{ route('reservations.show', $reservation->id) }}" class="btn btn-sm btn-info mb-1">
-                                        <i class="fas fa-eye"></i> View
-                                    </a>
-                                    <a href="{{ route('reservations.edit', $reservation->id) }}" class="btn btn-sm btn-warning mb-1">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <form action="{{ route('reservations.destroy', $reservation->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this reservation?')">
-                                            <i class="fas fa-trash-alt"></i> Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @else
+        <!-- Reservation List -->
+        @if ($reservations->isEmpty())
             <div class="alert alert-info text-center">
                 No reservations found. Use the "Add Reservation" button to create one!
             </div>
+        @else
+            <div class="list-group shadow-sm">
+                @foreach ($reservations as $reservation)
+                    <a href="{{ route('reservations.show', $reservation->id) }}" class="list-group-item list-group-item-action d-flex align-items-start">
+                        <!-- Image Section -->
+                        <img src="{{ $reservation->device->photo ? asset('storage/' . $reservation->device->photo) : asset('images/placeholder-device.png') }}"
+                             alt="{{ $reservation->device->name }}"
+                             class="rounded"
+                             style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;">
+
+                        <!-- Text Content -->
+                        <div class="w-100">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-1">{{ $reservation->device->name }}</h5>
+                                <small class="text-muted">
+                                    {{ $reservation->reservation_date ? \Carbon\Carbon::parse($reservation->reservation_date)->format('d M Y') : 'N/A' }}
+                                </small>
+                            </div>
+                            <p class="mb-1 text-muted">
+                                <strong>User:</strong> {{ $reservation->user->name }}<br>
+                                <strong>Duration:</strong> {{ $reservation->duration }} days
+                            </p>
+                            <span class="badge
+                            @if ($reservation->status == 'Approved') bg-success
+                            @elseif ($reservation->status == 'Pending') bg-warning text-dark
+                            @else bg-danger
+                            @endif">
+                            {{ ucfirst($reservation->status) }}
+                        </span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
         @endif
-
     </div>
-
-
 @endsection
 
 @push('styles')
     <style>
-        /* Reservation Card Styles */
-        .reservation-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            background: #fff;
-            overflow: hidden;
+        .list-group-item {
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s ease-in-out;
         }
-        .reservation-card .card-body {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 20px;
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
         }
-        .reservation-status {
-            font-size: 14px;
+
+        .badge {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+        }
+
+        h5 {
+            font-size: 1.1rem;
             font-weight: bold;
         }
     </style>

@@ -1,6 +1,6 @@
 <?php
+
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Storage;
 
 use App\Models\Device;
 use App\Models\DeviceType;
@@ -31,108 +31,110 @@ class DeviceController extends Controller
             $photoPath = $request->file('photo')->store('device_photos', 'public');
 
             // Debugging: check the stored path
-            logger()->info("Uploaded photo path: " . $photoPath);
+            logger()->info('Uploaded photo path: '.$photoPath);
 
             // Store the file path in the database
             $validated['photo'] = $photoPath;
         }
-
 
         $device = Device::create($validated);
 
         return redirect()->route('devices.index')->with('success', 'Device created successfully!');
     }
 
+    public function index(Request $request)
+    {
+        $deviceType = $request->input('device_type');
 
-    public function index()
-{
-// Fetch all devices from the database
-$devices = Device::all();
+        $devices = Device::when($deviceType, function ($query, $deviceType) {
+            $query->where('type_id', $deviceType);
+        })->get();
 
-// Pass the devices to the view
-return view('devices.index', compact('devices'));
-}
+        $deviceTypes = \App\Models\DeviceType::all(); // Fetch all device types
 
-public function edit(int $id)
-{
-$device = Device::findOrFail($id);
-// Načíst všechna studia
-$studios = Studio::all();
+        return view('devices.index', compact('devices', 'deviceTypes'));
+    }
 
-// Načíst všechny typy zařízení
-$device_types = DeviceType::all();
+    public function edit(int $id)
+    {
+        $device = Device::findOrFail($id);
+        // Načíst všechna studia
+        $studios = Studio::all();
 
-// Vrátit šablonu s daty
-return view('devices.edit', compact('device', 'device_types', 'studios'));
-}
+        // Načíst všechny typy zařízení
+        $device_types = DeviceType::all();
 
-public function update(Request $request, Device $device)
-{
-// Logování pro ladění
-logger()->info('Update Device Request Data:', $request->all());
+        // Vrátit šablonu s daty
+        return view('devices.edit', compact('device', 'device_types', 'studios'));
+    }
 
-// Validace
-$validated = $request->validate([
-'name' => 'required|string|max:255',
-'type_id' => 'required|exists:device_types,id',
-'studio_id' => 'required|exists:studios,id',
-'available' => 'nullable|boolean',
-]);
+    public function update(Request $request, Device $device)
+    {
+        // Logování pro ladění
+        logger()->info('Update Device Request Data:', $request->all());
 
-// Pokud checkbox "available" není zaškrtnutý, nastavíme hodnotu na false
-$validated['available'] = $request->has('available');
+        // Validace
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type_id' => 'required|exists:device_types,id',
+            'studio_id' => 'required|exists:studios,id',
+            'available' => 'nullable|boolean',
+        ]);
 
-// Aktualizace zařízení
-$device->update($validated);
+        // Pokud checkbox "available" není zaškrtnutý, nastavíme hodnotu na false
+        $validated['available'] = $request->has('available');
 
-// Přesměrování zpět s potvrzením
-return redirect()->route('devices.index')->with('success', 'Device updated successfully!');
-}
+        // Aktualizace zařízení
+        $device->update($validated);
 
-public function create()
-{
-$device_types = DeviceType::all();
-$studios = Studio::all();
-$users = User::all();
+        // Přesměrování zpět s potvrzením
+        return redirect()->route('devices.index')->with('success', 'Device updated successfully!');
+    }
 
-return view('devices.create', compact('device_types', 'studios', 'users'));
-}
+    public function create()
+    {
+        $device_types = DeviceType::all();
+        $studios = Studio::all();
+        $users = User::all();
 
-public function show($id)
-{
-// Fetch the device by its ID
-$device = Device::findOrFail($id);
+        return view('devices.create', compact('device_types', 'studios', 'users'));
+    }
 
-// Return a view to display the device details
-return view('devices.show', compact('device'));
-}
+    public function show($id)
+    {
+        // Fetch the device by its ID
+        $device = Device::findOrFail($id);
 
-public function assignToUser(Request $request, $id)
-{
-$device = Device::findOrFail($id);
-$user = auth()->user(); // Or fetch another user as needed
+        // Return a view to display the device details
+        return view('devices.show', compact('device'));
+    }
 
-// Assign the device to the user
-$user->device_id = $device->id;
-$user->save();
+    public function assignToUser(Request $request, $id)
+    {
+        $device = Device::findOrFail($id);
+        $user = auth()->user(); // Or fetch another user as needed
 
-return redirect()->back()->with('success', 'Device successfully assigned to the user.');
-}
+        // Assign the device to the user
+        $user->device_id = $device->id;
+        $user->save();
 
-public function destroy($id)
-{
-try {
-// Find the device by ID
-$device = Device::findOrFail($id);
+        return redirect()->back()->with('success', 'Device successfully assigned to the user.');
+    }
 
-// Delete the device
-$device->delete();
+    public function destroy($id)
+    {
+        try {
+            // Find the device by ID
+            $device = Device::findOrFail($id);
 
-// Redirect back with a success message
-return redirect()->route('devices.index')->with('success', 'Device deleted successfully.');
-} catch (\Exception) {
-// Redirect back with an error message in case of failure
-return redirect()->route('devices.index')->with('error', 'Failed to delete the device.');
-}
-}
+            // Delete the device
+            $device->delete();
+
+            // Redirect back with a success message
+            return redirect()->route('devices.index')->with('success', 'Device deleted successfully.');
+        } catch (\Exception) {
+            // Redirect back with an error message in case of failure
+            return redirect()->route('devices.index')->with('error', 'Failed to delete the device.');
+        }
+    }
 }

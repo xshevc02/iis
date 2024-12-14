@@ -4,7 +4,6 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0">Manage Users</h1>
-            <a href="{{ route('users.create') }}" class="btn btn-success">Add User to Studio</a>
         </div>
 
         @if ($errors->any())
@@ -31,8 +30,7 @@
                                 <h5 class="card-title text-center">{{ $user->name }}</h5>
                                 <p class="card-text text-center">
                                     <strong>Email:</strong> {{ $user->email }} <br>
-                                    <strong>Role:</strong> {{ $user->role->name ?? 'N/A' }} <br>
-                                    <strong>Studio:</strong> {{ $user->studio->name ?? 'N/A' }}
+
                                 </p>
                             </div>
                         </div>

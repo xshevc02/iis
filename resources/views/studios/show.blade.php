@@ -9,7 +9,6 @@
                     <!-- Header Section -->
                     <div class="card-header text-center bg-light py-4 rounded-top">
                         <h1 class="fw-bold mb-0" style="color: white;">{{ $studio->name }}</h1>
-                        <small style="color: rgba(255, 255, 255, 0.8);">Studio ID: #{{ $studio->id }}</small>
                     </div>
 
                     <!-- Studio Details -->
